@@ -5,7 +5,7 @@ const ButtonBetaSignOn = () => {
   return (
     <button
       className="btn btn-primary"
-      onClick={() => signIn(undefined, { callbackUrl: config.callbackUrl })}
+      onClick={() => signIn(undefined, { callbackUrl: config.auth.callbackUrl })}
     >
       Beta Login
     </button>
