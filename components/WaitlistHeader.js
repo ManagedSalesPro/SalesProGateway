@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import ButtonBetaSignOn from "@/components/ButtonBetaSignOn";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/app/icon.png";
@@ -10,6 +11,9 @@ import config from "@/config";
 const links = [
   
 ];
+
+<ButtonBetaSignOn className="btn btn-primary btn-wide">Beta Sign In</ButtonBetaSignOn>
+
 
 // A header with a logo on the left, links in the center (like Pricing, etc...), and a CTA (like Get Started or Login) on the right.
 // The header is responsive, and on mobile, the links are hidden behind a burger button.
@@ -83,6 +87,10 @@ const WaitlistHeader = () => {
             </Link>
           ))}
         </div>
+
+        {/* CTA on large screens */}
+        <div className="hidden lg:flex lg:justify-end lg:flex-1">{<ButtonBetaSignOn className="btn btn-primary btn-wide">Beta Sign In</ButtonBetaSignOn>
+}</div>
       </nav>
 
       {/* Mobile menu, show/hide based on menu state. */}
@@ -146,6 +154,9 @@ const WaitlistHeader = () => {
               </div>
             </div>
             <div className="divider"></div>
+            {/* Your CTA on small screens */}
+            <div className="flex flex-col">{<ButtonBetaSignOn className="btn btn-primary btn-wide">Beta Sign In</ButtonBetaSignOn>
+}</div>
           </div>
         </div>
       </div>

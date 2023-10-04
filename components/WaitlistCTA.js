@@ -21,7 +21,7 @@ const WaitlistCTA = () => {
             Don&apos;t waste time chasing the wrong clients 
           </p>
 
-          <ButtonLead className="btn btn-primary btn-wide">Get ShipFast</ButtonLead>
+          <ButtonLead className="btn btn-primary btn-wide">Join The Waitlist</ButtonLead>
         </div>
       </div>
     </section>
