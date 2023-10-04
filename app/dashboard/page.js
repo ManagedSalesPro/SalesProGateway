@@ -1,38 +1,29 @@
-import { signOut } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/libs/next-auth";
+import connectMongo from "@/libs/mongoose";
+import User from "@/models/User";
 
 // This is a private page: It's protected by the layout.js component which ensures the user is authenticated.
 // It's a server compoment which means you can fetch data (like the user profile) before the page is rendered.
 // See https://shipfa.st/docs/tutorials/private-page
+
 export default async function Dashboard() {
+  await connectMongo();
+  const session = await getServerSession(authOptions);
+  const user = await User.findById(session.user.id);
 
   return (
     <>
-      <main
-        className="min-h-screen p-8 pb-24"
-      >
+      <main className="min-h-screen p-8 pb-24">
         <section className="max-w-xl mx-auto space-y-8">
           <h1 className="text-3xl md:text-4xl font-extrabold">
-            Your Food Recipes
+            User Dashboard
           </h1>
-
-          <p className="text-lg leading-relaxed text-base-content/80">
-            {status === "authenticated"
-              ? `Welcome ${session?.user?.name}`
-              : "You are not logged in"}
-            <br />
-            {session?.user?.email
-              ? `Your email is ${session?.user?.email}`
-              : ""}
-          </p>
-
-          <button
-              className="btn btn-ghost"
-              onClick={() => signOut({ callbackUrl: "/" })}
-            >
-              Logout
-            </button>
+          <p>Welcome {user.name} 👋</p>
+          <p>Your email is {user.email}</p>
         </section>
       </main>
     </>
   );
 }
+
