@@ -15,7 +15,8 @@ export async function POST(req) {
     const user = await User.findOne({ email: body.email });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      // Provide more context in the error message
+      return NextResponse.json({ error: `User with email ${body.email} not found` }, { status: 404 });
     }
 
     // Update user details
