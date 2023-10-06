@@ -21,11 +21,11 @@ export default async function Profile() {
     updatedAt: new Date("2023-10-03T04:05:34.370+00:00"),
     __v: 0
   };
+  
   */
 
-
   // Assign the mock user data to the user variable
-  //const user = mockUser;
+  // const user = mockUser;
 
 
   const user = await User.findById(session.user.id);
