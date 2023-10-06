@@ -10,8 +10,6 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
-
-
   const handleInputChange = (e) => {
     setEditedUser({ ...editedUser, [e.target.name]: e.target.value });
   };
@@ -19,8 +17,6 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
   const handleEditProfile = async (e) => {
     e?.preventDefault();
     
-    setEditedUser({... editedUser, [e.editedUser.email]: e.currentUser.email })
-
     setIsLoading(true);
     try {
       await apiClient.post("/updateprofile", { editedUser });
@@ -47,17 +43,15 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
         type="text"
         name="name"
         value={editedUser.name}
-        autoComplete="email"
         onChange={handleInputChange}
-        placeholder="Full Name"
+        placeholder="Name"
       />
       <input
         type="text"
         name="company"
         value={editedUser.company}
-        autoComplete="company"
         onChange={handleInputChange}
-        placeholder="Company Name"
+        placeholder="Company"
       />
 
       <button
