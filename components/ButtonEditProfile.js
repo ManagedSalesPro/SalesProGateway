@@ -16,14 +16,25 @@ const ButtonEditProfile = ({ currentUser }) => {
   const handleEditProfile = async () => {
     setLoading(true);
     try {
-      const response = await apiClient.post('/api/updateprofile', editedUser);
+      const response = await apiClient.post("/updateprofile", editedUser);
+
+      // Check if the response has a data property
+      // If not, use the response directly
+      const responseData = response.data || response;
+
+      if (responseData.message) {
+        setMessage(responseData.message);
+      } else {
+        setMessage(responseData.error);
+      }
+      
       if (response.data.message) {
         setMessage(response.data.message);
       } else {
         setMessage(response.data.error);
       }
     } catch (error) {
-      setMessage('An error occurred while updating the profile.');
+      setMessage(error.message || 'An error occurred while updating the profile.');
     }
     setLoading(false);
   };
