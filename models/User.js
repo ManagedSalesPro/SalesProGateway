@@ -14,6 +14,12 @@ const userSchema = mongoose.Schema(
       lowercase: true,
       private: true,
     },
+    company: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      private: true,
+    },
     image: {
       type: String,
     },
