@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from 'react';
+import { toast } from "react-hot-toast";
 import apiClient from '@/libs/api';
 
 const ButtonEditProfile = ({ currentUser, extraStyle }) => {
@@ -9,16 +10,20 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
+
+
   const handleInputChange = (e) => {
     setEditedUser({ ...editedUser, [e.target.name]: e.target.value });
   };
 
-  const handleEditProfile = async () => {
+  const handleEditProfile = async (e) => {
     e?.preventDefault();
     
+    setEditedUser({... editedUser, [e.editedUser.email]: e.currentUser.email })
+
     setIsLoading(true);
     try {
-      await apiClient.post("/updateprofile", { email });
+      await apiClient.post("/updateprofile", { editedUser });
       
       toast.success("Profile update successfully!");
 

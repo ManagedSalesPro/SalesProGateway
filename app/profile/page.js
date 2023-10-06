@@ -39,7 +39,7 @@ export default async function Profile() {
             <h2 className="text-center text-2xl font-semibold mt-3">{user.name}</h2>
             <p className="text-center text-gray-600 mt-1">{user.company}</p>
             <p className="text-center text-gray-600 mt-1">{user.email}</p>
-            <ButtonEditProfile currentUser={user} />
+            <ButtonEditProfile currentUser={user} className="btn btn-primary btn-wide">Update Your Profile</ButtonEditProfile>
           </div>
         </section>
       </main>
