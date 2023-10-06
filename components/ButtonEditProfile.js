@@ -19,7 +19,7 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
   const handleEditProfile = async (e) => {
     e?.preventDefault();
     
-    setEditedUser({... editedUser, [editedUser.email]: currentUser.email })
+    setEditedUser({... editedUser, [e.editedUser.email]: e.currentUser.email })
 
     setIsLoading(true);
     try {
