@@ -11,7 +11,7 @@ export default async function Profile() {
   const session = await getServerSession(authOptions);
 
   // Mock user data
-  /*
+  
   const mockUser = {
     _id: '651cc972ac3c03abc4e9fdc2',
     email: "abrehamdadi2@gmail.com",
@@ -21,14 +21,14 @@ export default async function Profile() {
     updatedAt: new Date("2023-10-03T04:05:34.370+00:00"),
     __v: 0
   };
-  */
+  
 
 
   // Assign the mock user data to the user variable
-  //const user = mockUser;
+  const user = mockUser;
 
 
-  const user = await User.findById(session.user.id);
+  //const user = await User.findById(session.user.id);
 
   return (
     <div className="flex h-screen bg-base-300">
@@ -39,7 +39,7 @@ export default async function Profile() {
             <h2 className="text-center text-2xl font-semibold mt-3">{user.name}</h2>
             <p className="text-center text-gray-600 mt-1">{user.company}</p>
             <p className="text-center text-gray-600 mt-1">{user.email}</p>
-            <ButtonEditProfile currentUser={user} />
+            <ButtonEditProfile currentUser={user} className="btn btn-primary btn-wide">Update Your Profile</ButtonEditProfile>
           </div>
         </section>
       </main>
