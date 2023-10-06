@@ -9,24 +9,16 @@ import config from "@/config";
 
 const links = [
   {
-    href: "/#profile",
+    href: "/profile",
     label: "Profile",
   },
   {
-    href: "/#settings",
-    label: "Settings",
-  },
-  {
-    href: "/#clientsearch",
+    href: "/clientsearch",
     label: "Client Search",
-  },
-  {
-    href: "/#logout",
-    label: "Log Out",
   },
 ];
 
-const DashboardNavBar = () => {
+const ProfileNavBar = () => {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -40,7 +32,7 @@ const DashboardNavBar = () => {
       <div className={`w-64 flex-shrink-0 ${isOpen ? "block" : "hidden"} lg:block`}>
         <div className="flex flex-col h-full bg-base-200">
           {/* Logo */}
-          <div className="flex items-center justify-center h-16 px-6 bg-base-200">
+          <div className="flex items-center justify-center h-16 mt-10 mb-5 px-6 bg-base-200">
             <Image src={logo} alt={`${config.appName} logo`} className="w-8" placeholder="blur" priority={true} />
             <span className="ml-3 text-2xl font-semibold">{config.appName}</span>
           </div>
@@ -90,4 +82,4 @@ const DashboardNavBar = () => {
   );
 };
 
-export default DashboardNavBar;
+export default ProfileNavBar;
