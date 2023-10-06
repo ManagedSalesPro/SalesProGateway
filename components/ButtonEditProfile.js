@@ -6,7 +6,7 @@ import apiClient from '@/libs/api';
 
 const ButtonEditProfile = ({ currentUser, extraStyle }) => {
   const inputRef = useRef(null);
-  const [editedUser, setEditedUser] = useState(currentUser);
+  const [editedUser, setEditedUser] = useState({ ...currentUser, email: currentUser.email });
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -19,8 +19,8 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
     
     setIsLoading(true);
     try {
-      await apiClient.post("/updateprofile", { editedUser });
-      
+      await apiClient.post("/updateprofile", editedUser);
+
       toast.success("Profile update successfully!");
 
       // just remove the focus on the input
