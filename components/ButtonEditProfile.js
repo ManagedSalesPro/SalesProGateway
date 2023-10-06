@@ -22,12 +22,6 @@ const ButtonEditProfile = ({ currentUser }) => {
       // If not, use the response directly
       const responseData = response.data || response;
 
-      if (responseData.message) {
-        setMessage(responseData.message);
-      } else {
-        setMessage(responseData.error);
-      }
-      
       if (response.data.message) {
         setMessage(response.data.message);
       } else {
