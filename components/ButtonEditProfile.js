@@ -63,7 +63,6 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
       <button
         className="btn btn-primary btn-block"
         type="submit"
-        onClick={handleEditProfile}
         disabled={isDisabled}
       >
         Update Your Profile
