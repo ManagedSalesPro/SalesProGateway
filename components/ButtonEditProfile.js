@@ -20,7 +20,7 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
     setIsLoading(true);
     try {
       await apiClient.post("/updateprofile", editedUser);
-
+      
       toast.success("Profile update successfully!");
 
       // just remove the focus on the input
