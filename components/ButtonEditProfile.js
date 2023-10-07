@@ -1,87 +1,25 @@
+// components/ButtonEditProfile.js
 "use client";
 
-import { useState, useRef } from 'react';
-import { toast } from "react-hot-toast";
-import apiClient from '@/libs/api';
+import { useState } from 'react';
+import ButtonUpdateProfile from './ButtonUpdateProfile';
 
-const ButtonEditProfile = ({ currentUser, extraStyle }) => {
-  const inputRef = useRef(null);
-  const [editedUser, setEditedUser] = useState({ ...currentUser, email: currentUser.email });
-  const [isLoading, setIsLoading] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
-
-  const handleInputChange = (e) => {
-    setEditedUser({ ...editedUser, [e.target.name]: e.target.value });
-  };
-
-  const handleEditProfile = async (e) => {
-    
-    e?.preventDefault();
-    
-    setIsLoading(true);
-    try {
-      await apiClient.post("/updateprofile", editedUser);
-      
-      toast.success("Profile update successfully!");
-      
-      // Refresh the current page using the native browser method
-      window.location.reload();
-
-      // just remove the focus on the input
-      inputRef.current.blur();
-      setEditedUser("");
-      setIsDisabled(true);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const ButtonEditProfile = ({ currentUser }) => {
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <form
-      className={`w-full max-w-xs space-y-3 ${extraStyle ? extraStyle : ""}`}
-      onSubmit={handleEditProfile}
-    >
-      <input
-        type="text"
-        name="name"
-        value={editedUser.name}
-        onChange={handleInputChange}
-        placeholder="Name"
-      />
-      <input
-        type="text"
-        name="company"
-        value={editedUser.company}
-        onChange={handleInputChange}
-        placeholder="Company"
-      />
-
-      <button
-        className="btn btn-primary btn-block"
-        type="submit"
-        disabled={isDisabled}
-      >
-        Update Your Profile
-        {isLoading ? (
-          <span className="loading loading-spinner loading-xs"></span>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z"
-              clipRule="evenodd"
-            />
-          </svg>
-        )}
-      </button>
-    </form>
+    <div className="max-w-lg mx-auto my-10 bg-white rounded-lg shadow-md p-5">
+      {isEditing ? (
+        <ButtonUpdateProfile currentUser={currentUser} />
+      ) : (
+        <>
+          <h2 className="text-center text-2xl font-semibold mt-3">{currentUser.name}</h2>
+          <p className="text-center text-gray-600 mt-1">{currentUser.company}</p>
+          <p className="text-center text-gray-500 mt-1">{currentUser.email}</p> {/* Displaying the user's email */}
+          <button onClick={() => setIsEditing(true)} className="btn btn-primary btn-block mx-auto mt-5">Edit Profile</button>
+        </>
+      )}
+    </div>
   );
 };
 
