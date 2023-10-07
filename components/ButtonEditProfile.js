@@ -11,11 +11,14 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
+  const router = useRouter();
+  
   const handleInputChange = (e) => {
     setEditedUser({ ...editedUser, [e.target.name]: e.target.value });
   };
 
   const handleEditProfile = async (e) => {
+    
     e?.preventDefault();
     
     setIsLoading(true);
@@ -26,7 +29,7 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
       
       // Refresh the current page to reflect the updated user details
       router.reload();
-      
+
       // just remove the focus on the input
       inputRef.current.blur();
       setEditedUser("");
