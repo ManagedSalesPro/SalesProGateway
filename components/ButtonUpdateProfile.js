@@ -1,36 +1,30 @@
-"use client";
+// components/ButtonUpdateProfile.js
 
 import { useState, useRef } from 'react';
 import { toast } from "react-hot-toast";
 import apiClient from '@/libs/api';
 
-const ButtonUpdateProfile = ({ currentUser, extraStyle }) => {
+const ButtonUpdateProfile = ({ currentUser }) => {
   const inputRef = useRef(null);
   const [editedUser, setEditedUser] = useState({ ...currentUser, email: currentUser.email });
   const [isLoading, setIsLoading] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleInputChange = (e) => {
     setEditedUser({ ...editedUser, [e.target.name]: e.target.value });
   };
 
   const handleEditProfile = async (e) => {
-    
     e?.preventDefault();
-    
     setIsLoading(true);
     try {
       await apiClient.post("/updateprofile", editedUser);
+      toast.success("Profile updated successfully!");
       
-      toast.success("Profile update successfully!");
+      // Set a delay of 1 second before redirecting
+      setTimeout(() => {
+        window.location.href = '/profile';
+      }, 1000);
       
-      // After updating the profile, redirect the user back to the profile page
-      window.location.href = '/profile';
-
-      // just remove the focus on the input
-      inputRef.current.blur();
-      setEditedUser("");
-      setIsDisabled(true);
     } catch (error) {
       console.log(error);
     } finally {
@@ -39,16 +33,14 @@ const ButtonUpdateProfile = ({ currentUser, extraStyle }) => {
   };
 
   return (
-    <form
-      className={`w-full max-w-xs space-y-3 ${extraStyle ? extraStyle : ""}`}
-      onSubmit={handleEditProfile}
-    >
+    <form onSubmit={handleEditProfile} className="space-y-3">
       <input
         type="text"
         name="name"
         value={editedUser.name}
         onChange={handleInputChange}
         placeholder="Name"
+        className="block w-full p-2 mt-3 border rounded-md"
       />
       <input
         type="text"
@@ -56,31 +48,9 @@ const ButtonUpdateProfile = ({ currentUser, extraStyle }) => {
         value={editedUser.company}
         onChange={handleInputChange}
         placeholder="Company"
+        className="block w-full p-2 mt-3 border rounded-md"
       />
-
-      <button
-        className="btn btn-primary btn-block"
-        type="submit"
-        disabled={isDisabled}
-      >
-        Update Your Profile
-        {isLoading ? (
-          <span className="loading loading-spinner loading-xs"></span>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z"
-              clipRule="evenodd"
-            />
-          </svg>
-        )}
-      </button>
+      <button className="btn btn-primary btn-block mx-auto" type="submit">Update Your Profile</button>
     </form>
   );
 };

@@ -10,26 +10,13 @@ const ButtonEditProfile = ({ currentUser }) => {
   return (
     <div className="max-w-lg mx-auto my-10 bg-white rounded-lg shadow-md p-5">
       {isEditing ? (
-        <>
-          <input
-            type="text"
-            defaultValue={currentUser.name}
-            placeholder="Name"
-            className="block w-full p-2 mt-3 border rounded-md"
-          />
-          <input
-            type="text"
-            defaultValue={currentUser.company}
-            placeholder="Company"
-            className="block w-full p-2 mt-3 border rounded-md"
-          />
-          <ButtonUpdateProfile currentUser={currentUser} className="btn btn-primary btn-wide mt-4" />
-        </>
+        <ButtonUpdateProfile currentUser={currentUser} />
       ) : (
         <>
           <h2 className="text-center text-2xl font-semibold mt-3">{currentUser.name}</h2>
           <p className="text-center text-gray-600 mt-1">{currentUser.company}</p>
-          <button onClick={() => setIsEditing(true)} className="btn btn-primary btn-wide mt-4">Edit Profile</button>
+          <p className="text-center text-gray-500 mt-1">{currentUser.email}</p> {/* Displaying the user's email */}
+          <button onClick={() => setIsEditing(true)} className="btn btn-primary btn-block mx-auto mt-5">Edit Profile</button>
         </>
       )}
     </div>
