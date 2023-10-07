@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema(
     name: {
       type: String,
       trim: true,
+      private: false,
     },
     email: {
       type: String,
@@ -17,7 +18,7 @@ const userSchema = mongoose.Schema(
     company: {
       type: String,
       trim: true,
-      private: true,
+      private: false,
     },
     image: {
       type: String,
