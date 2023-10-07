@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { toast } from "react-hot-toast";
 import apiClient from '@/libs/api';
+import { useRouter } from 'next/router';
 
 const ButtonEditProfile = ({ currentUser, extraStyle }) => {
   const inputRef = useRef(null);
@@ -22,7 +23,10 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
       await apiClient.post("/updateprofile", editedUser);
       
       toast.success("Profile update successfully!");
-
+      
+      // Refresh the current page to reflect the updated user details
+      router.reload();
+      
       // just remove the focus on the input
       inputRef.current.blur();
       setEditedUser("");
