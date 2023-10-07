@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema(
       type: String,
       trim: true,
       lowercase: true,
-      private: true,
+      private: false,
     },
     company: {
       type: String,
