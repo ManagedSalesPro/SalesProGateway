@@ -3,7 +3,6 @@
 import { useState, useRef } from 'react';
 import { toast } from "react-hot-toast";
 import apiClient from '@/libs/api';
-import { useRouter } from 'next/router';
 
 const ButtonEditProfile = ({ currentUser, extraStyle }) => {
   const inputRef = useRef(null);
@@ -11,8 +10,6 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const router = useRouter();
-  
   const handleInputChange = (e) => {
     setEditedUser({ ...editedUser, [e.target.name]: e.target.value });
   };
@@ -27,8 +24,8 @@ const ButtonEditProfile = ({ currentUser, extraStyle }) => {
       
       toast.success("Profile update successfully!");
       
-      // Refresh the current page to reflect the updated user details
-      router.reload();
+      // Refresh the current page using the native browser method
+      window.location.reload();
 
       // just remove the focus on the input
       inputRef.current.blur();
