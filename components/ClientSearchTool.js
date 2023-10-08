@@ -116,6 +116,29 @@ export default function ClientSearchTool() {
                         </label>
                     ))}
                 </div>
+                
+                <div>
+                    <label>Domain</label>
+                    {distinctFilters.domains.map(domain => (
+                        <label key={domain}>
+                            <input
+                                type="checkbox"
+                                value={domain}
+                                checked={filters.domain.includes(domain)}
+                                onChange={() => {
+                                    const newDomain = [...filters.domain];
+                                    if (newDomain.includes(domain)) {
+                                        newDomain.splice(newDomain.indexOf(domain), 1);
+                                    } else {
+                                        newDomain.push(domain);
+                                    }
+                                    setFilters({ ...filters, domain: newDomain });
+                                }}
+                            />
+                            {domain}
+                        </label>
+                    ))}
+                </div>
 
                 <div>
                     <label>Estimated Revenue</label>
