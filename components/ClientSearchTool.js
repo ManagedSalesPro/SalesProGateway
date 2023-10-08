@@ -32,7 +32,21 @@ export default function ClientSearchTool() {
         try {
             const response = await apiClient.post("/distinct-filters", filters);
             const data = await response.json();
-            setDistinctFilters(data);
+
+            // Flatten the arrays
+            const flattenedIndustries = data.industries.flat();
+            const flattenedSoftwareStacks = data.softwareStacks.flat();
+            const flattenedHardwareStacks = data.hardwareStacks.flat();
+            const flattenedDomains = data.domains.flat();
+
+            // Set the flattened arrays to the state
+            setDistinctFilters({
+                ...data,
+                industries: flattenedIndustries,
+                softwareStacks: flattenedSoftwareStacks,
+                hardwareStacks: flattenedHardwareStacks,
+                domains: flattenedDomains
+            });
         } catch (error) {
             console.error("Error fetching distinct filters:", error);
         }
@@ -55,17 +69,16 @@ export default function ClientSearchTool() {
 
     return (
         <div className="rounded bg-white shadow-lg p-4">
-            
-                {/* Search Bar */}
-                <div className="mb-4">
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        onChange={handleInputChange}
-                        name="companyName"
-                        className="w-full p-2 rounded"
-                    />
-                </div>
+            {/* Search Bar */}
+            <div className="mb-4">
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    onChange={handleInputChange}
+                    name="companyName"
+                    className="w-full p-2 rounded"
+                />
+            </div>
             <div className="w-1/5 p-4 border-r">
                 {/* Filters */}
                 <div>

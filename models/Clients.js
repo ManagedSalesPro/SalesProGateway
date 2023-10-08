@@ -14,11 +14,11 @@ const clientsSchema = mongoose.Schema(
       trim: true,
     },
     industry: {
-      type: String,
+      type: [String],
       trim: true,
     },
     domain: {
-      type: String,
+      type: [String],
       trim: true,
     },
     estimatedRevenue: {
@@ -30,11 +30,11 @@ const clientsSchema = mongoose.Schema(
       trim: true,
     },
     softwareStack: {
-      type: Array,
+      type: [String],
       trim: true,
     },
     hardwareStack: {
-      type: Array,
+      type: [String],
       trim: true,
     }
     // Add more fields as needed
@@ -48,4 +48,4 @@ const clientsSchema = mongoose.Schema(
 // Add a plugin that converts mongoose to JSON
 clientsSchema.plugin(toJSON);
 
-export default mongoose.models.Clients || mongoose.model("Client", clientsSchema);
+export default mongoose.models.Clients || mongoose.model("Clients", clientsSchema);
