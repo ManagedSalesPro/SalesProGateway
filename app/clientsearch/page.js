@@ -1,39 +1,18 @@
-// app/clientsearch/page.js
-import SearchBar from '@/components/SearchBar';
-import FilterOptions from '@/components/FilterOptions';
-import SearchResults from '@/components/SearchResults';
-import apiClient from '@/libs/api';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/libs/next-auth";
+import connectMongo from "@/libs/mongoose";
+import ClientSearchNavBar from "@/components/ClientSearchNavBar";
 
-export default function ClientSearch() {
-  const [results, setResults] = useState([]);
 
-  const handleSearch = async (query, filters) => {
-    const data = await apiClient.get(`/api/clientsearch`, {
-      params: {
-        query,
-        ...filters
-      }
-    });
-    setResults(data);
-  };
+export default async function Profile() {
+  await connectMongo();
+  const session = await getServerSession(authOptions);
 
   return (
-    <div className="client-search-container">
+    <div className="flex h-screen bg-base-300">
       <ClientSearchNavBar />
-      <SearchBar onSearch={handleSearch} />
-      <FilterOptions onFilter={(filters) => handleSearch('', filters)} />
-      <SearchResults results={results} />
-      
-      <style jsx>{`
-        .client-search-container {
-          /* Styling for the client search container */
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          width: 80%;
-          margin: 0 auto;
-        }
-      `}</style>
+      <main className="flex-1 p-8 pb-24 overflow-y-auto">
+      </main>
     </div>
   );
 }
