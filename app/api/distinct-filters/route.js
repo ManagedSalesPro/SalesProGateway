@@ -1,20 +1,19 @@
 import { NextResponse } from "next/server";
 import connectMongo from "@/libs/mongoose"; // Assuming this properly connects to your MongoDB using Mongoose
-import Client from "@/models/Client"; // Import your Mongoose model
+import Clients from "@/models/Clients"; // Import your Mongoose model
 
-export async function POST(req) {
+export async function POST() {
   try {
     // Connect to MongoDB (assuming your connectMongo function handles this)
     await connectMongo();
 
-    // Use your Mongoose model to work with the "clients" collection
-    const clients = await Client.find({}); // Change this query as needed
-
+  
     // Perform your operations on the "clients" collection
-    const industries = [...new Set(clients.map((client) => client.industry))];
-    const softwareStacks = [...new Set(clients.map((client) => client.softwareStack))];
-    const hardwareStacks = [...new Set(clients.map((client) => client.hardwareStack))];
-    const domains = [...new Set(clients.map((client) => client.domain))];
+    const industries = await Clients.distinct("industry");
+    const softwareStacks = await Clients.distinct("softwareStack");
+    const hardwareStacks = await Clients.distinct("hardwareStack");
+    const domains = await Clients.distinct("domain");
+
 
     // Respond with the appropriate data
     return NextResponse.json({ industries, softwareStacks, hardwareStacks, domains });

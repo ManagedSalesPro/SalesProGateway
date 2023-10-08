@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
 
 // CLIENT SCHEMA
-const clientSchema = mongoose.Schema(
+const clientsSchema = mongoose.Schema(
   {
     // Define your client schema fields here
     industry: {
@@ -30,6 +30,6 @@ const clientSchema = mongoose.Schema(
 );
 
 // Add a plugin that converts mongoose to JSON
-clientSchema.plugin(toJSON);
+clientsSchema.plugin(toJSON);
 
-export default mongoose.models.Client || mongoose.model("Client", clientSchema);
+export default mongoose.models.Clients || mongoose.model("Client", clientsSchema);
