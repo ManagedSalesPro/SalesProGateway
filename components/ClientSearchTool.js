@@ -1,114 +1,188 @@
-// components/ClientSearchTool.js
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import apiClient from "@/libs/api";
 
 export default function ClientSearchTool() {
-  const [filters, setFilters] = useState({
-    companySize: null,
-    industry: [],
-    estimatedRevenue: null,
-    location: "",
-    softwareStack: [],
-    hardwareStack: []
-  });
-  const [results, setResults] = useState([]);
+    const [filters, setFilters] = useState({
+        companyName: "",
+        companySize: null,
+        industry: [],
+        domain: "",
+        estimatedRevenue: null,
+        location: "",
+        softwareStack: [],
+        hardwareStack: [],
+    });
+    const [results, setResults] = useState([]);
+    const [distinctFilters, setDistinctFilters] = useState({
+        industries: [],
+        softwareStacks: [],
+        hardwareStacks: [],
+        domains: [],
+        companySizes: [],
+        estimatedRevenues: [],
+    });
 
-  const handleSearch = async () => {
-    await apiClient.post("/clientsearch", JSON.stringify({ filters }));
-    
-    const data = await response.json();
-    setResults(data);
-  };
+    useEffect(() => {
+        fetchDistinctFilters();
+    }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFilters(prev => ({ ...prev, [name]: value }));
-  };
+    const fetchDistinctFilters = async () => {
+        try {
+            const response = await apiClient.post("/distinct-filters", filters);
+            const data = await response.json();
+            setDistinctFilters(data);
+        } catch (error) {
+            console.error("Error fetching distinct filters:", error);
+        }
+    };
 
-  return (
-    <div className="rounded bg-white shadow-lg p-4">
-      {/* Search Bar */}
-      <div className="mb-4">
-        <input 
-          type="text" 
-          placeholder="Search..." 
-          onChange={handleInputChange} 
-          name="searchQuery"
-          className="w-full p-2 rounded"
-        />
-      </div>
+    const handleSearch = async () => {
+        try {
+            const response = await apiClient.post("/distinct-filters", filters);
+            const data = await response.json();
+            setResults(data);
+        } catch (error) {
+            console.error("Error searching clients:", error);
+        }
+    };
 
-      {/* Filters */}
-      <div className="w-1/5 p-4 border-r space-y-4">
-        {/* Company Size */}
-        <div>
-          <label>Company Size</label>
-          <input 
-            type="range" 
-            value={filters.companySize} 
-            onChange={(e) => setFilters({ ...filters, companySize: e.target.value })}
-            className="w-full"
-          />
-        </div>
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFilters(prev => ({ ...prev, [name]: value }));
+    };
 
-        {/* Industry */}
-        <div>
-          <label>Industry</label>
-          {["Tech", "Finance", "Health"].map(industry => (
-            <div key={industry}>
-              <input 
-                type="checkbox" 
-                value={industry}
-                checked={filters.industry.includes(industry)}
-                onChange={() => {
-                  const newIndustry = [...filters.industry];
-                  if (newIndustry.includes(industry)) {
-                    newIndustry.splice(newIndustry.indexOf(industry), 1);
-                  } else {
-                    newIndustry.push(industry);
-                  }
-                  setFilters({ ...filters, industry: newIndustry });
-                }}
-              />
-              {industry}
+    return (
+        <div className="rounded bg-white shadow-lg p-4">
+            
+                {/* Search Bar */}
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        onChange={handleInputChange}
+                        name="companyName"
+                        className="w-full p-2 rounded"
+                    />
+                </div>
+            <div className="w-1/5 p-4 border-r">
+                {/* Filters */}
+                <div>
+                    <label>Company Size</label>
+                    <input
+                        type="range"
+                        min={distinctFilters.minCompanySize}
+                        max={distinctFilters.maxCompanySize}
+                        value={filters.companySize || ""}
+                        onChange={(e) => setFilters({ ...filters, companySize: e.target.value })}
+                        className="w-full p-2 rounded"
+                    />
+                    <div className="text-center">{filters.companySize || "Any"}</div>
+                </div>
+
+                <div>
+                    <label>Industry</label>
+                    {distinctFilters.industries.map(industry => (
+                        <label key={industry}>
+                            <input
+                                type="checkbox"
+                                value={industry}
+                                checked={filters.industry.includes(industry)}
+                                onChange={() => {
+                                    const newIndustry = [...filters.industry];
+                                    if (newIndustry.includes(industry)) {
+                                        newIndustry.splice(newIndustry.indexOf(industry), 1);
+                                    } else {
+                                        newIndustry.push(industry);
+                                    }
+                                    setFilters({ ...filters, industry: newIndustry });
+                                }}
+                            />
+                            {industry}
+                        </label>
+                    ))}
+                </div>
+
+                <div>
+                    <label>Estimated Revenue</label>
+                    <input
+                        type="range"
+                        min={distinctFilters.minEstimatedRevenue}
+                        max={distinctFilters.maxEstimatedRevenue}
+                        value={filters.estimatedRevenue || ""}
+                        onChange={(e) => setFilters({ ...filters, estimatedRevenue: e.target.value })}
+                        className="w-full p-2 rounded"
+                    />
+                    <div className="text-center">{filters.estimatedRevenue || "Any"}</div>
+                </div>
+
+                <div>
+                    <label>Location</label>
+                    <input
+                        type="text"
+                        value={filters.location}
+                        onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+                        placeholder="Enter city"
+                        className="w-full p-2 rounded"
+                    />
+                </div>
+
+                <div>
+                    <label>Software Stack</label>
+                    {distinctFilters.softwareStacks.map(stack => (
+                        <label key={stack}>
+                            <input
+                                type="checkbox"
+                                value={stack}
+                                checked={filters.softwareStack.includes(stack)}
+                                onChange={() => {
+                                    const newStack = [...filters.softwareStack];
+                                    if (newStack.includes(stack)) {
+                                        newStack.splice(newStack.indexOf(stack), 1);
+                                    } else {
+                                        newStack.push(stack);
+                                    }
+                                    setFilters({ ...filters, softwareStack: newStack });
+                                }}
+                            />
+                            {stack}
+                        </label>
+                    ))}
+                </div>                
+
+                <div>
+                    <label>Hardware Stack</label>
+                    {distinctFilters.hardwareStacks.map(stack => (
+                        <label key={stack}>
+                            <input
+                                type="checkbox"
+                                value={stack}
+                                checked={filters.hardwareStack.includes(stack)}
+                                onChange={() => {
+                                    const newStack = [...filters.hardwareStack];
+                                    if (newStack.includes(stack)) {
+                                        newStack.splice(newStack.indexOf(stack), 1);
+                                    } else {
+                                        newStack.push(stack);
+                                    }
+                                    setFilters({ ...filters, hardwareStack: newStack });
+                                }}
+                            />
+                            {stack}
+                        </label>
+                    ))}
+                </div>
             </div>
-          ))}
+
+            <div className="w-4/5 p-4 space-y-2">
+                {/* Search Results */}
+                {results.map((client) => (
+                    <div key={client._id} className="p-2 border-b rounded shadow-sm">
+                        {client.companyName}
+                    </div>
+                ))}
+            </div>
         </div>
-
-        {/* Estimated Revenue */}
-        <div>
-          <label>Estimated Revenue</label>
-          <input 
-            type="range" 
-            value={filters.estimatedRevenue} 
-            onChange={(e) => setFilters({ ...filters, estimatedRevenue: e.target.value })}
-            className="w-full"
-          />
-        </div>
-
-        {/* Geographic Location */}
-        <div>
-          <label>Location</label>
-          <input 
-            type="text" 
-            value={filters.location} 
-            onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-            placeholder="Enter city"
-            className="w-full p-2 rounded"
-          />
-        </div>
-
-        {/* Software Stack & Hardware Stack */}
-        {/* Similar to Industry */}
-      </div>
-
-      {/* Search Results */}
-      <div className="w-4/5 p-4 space-y-2">
-        {results.map((client) => (
-          <div key={client._id} className="p-2 border-b rounded shadow-sm">{client.companyName}</div>
-        ))}
-      </div>
-    </div>
-  );
+    );
 }
