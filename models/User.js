@@ -7,12 +7,18 @@ const userSchema = mongoose.Schema(
     name: {
       type: String,
       trim: true,
+      private: false,
     },
     email: {
       type: String,
       trim: true,
       lowercase: true,
-      private: true,
+      private: false,
+    },
+    company: {
+      type: String,
+      trim: true,
+      private: false,
     },
     image: {
       type: String,
