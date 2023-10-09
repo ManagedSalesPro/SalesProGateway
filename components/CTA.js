@@ -20,7 +20,7 @@ const CTA = () => {
             section...
           </p>
 
-          <button className="btn btn-primary btn-wide">Get ShipFast</button>
+          <button className="btn btn-primary btn-wide">Get ManagedSalesPro</button>
         </div>
       </div>
     </section>
