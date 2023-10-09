@@ -35,16 +35,16 @@ export default function ClientSearchTool() {
     const fetchDistinctFilters = async () => {
         try {
             const response = await apiClient.post("/distinct-filters");
-            const data = await response.json();
+            
             setDistinctFilters({
-                industries: data.industries,
-                softwareStacks: data.softwareStacks,
-                hardwareStacks: data.hardwareStacks,
-                domains: data.domains,
-                minCompanySize: data.minCompanySize,
-                maxCompanySize: data.maxCompanySize,
-                minEstimatedRevenue: data.minEstimatedRevenue,
-                maxEstimatedRevenue: data.maxEstimatedRevenue
+                industries: response.industries,
+                softwareStacks: response.softwareStacks,
+                hardwareStacks: response.hardwareStacks,
+                domains: response.domains,
+                minCompanySize: response.minCompanySize,
+                maxCompanySize: response.maxCompanySize,
+                minEstimatedRevenue: response.minEstimatedRevenue,
+                maxEstimatedRevenue: response.maxEstimatedRevenue
             });
         } catch (error) {
             console.error("Error fetching distinct filters:", error);
