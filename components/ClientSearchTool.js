@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import apiClient from "@/libs/api";
+import MultiRangeSlider from 'multi-range-slider-react';
+
 
 export default function ClientSearchTool() {
     const [filters, setFilters] = useState({
@@ -65,6 +67,7 @@ export default function ClientSearchTool() {
         const { name, value } = e.target;
         setFilters(prev => ({ ...prev, [name]: value }));
     };
+
 
     return (
         <div className="rounded bg-white shadow-lg p-4">
@@ -181,30 +184,36 @@ export default function ClientSearchTool() {
                     </div>
                 </div>
 
-                <div>
-                    <label>Estimated Revenue</label>
-                    <input
-                        type="range"
+                <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
+                    <label className="block text-center font-bold mb-2">Estimated Revenue</label>
+                    <MultiRangeSlider
                         min={distinctFilters.minEstimatedRevenue}
                         max={distinctFilters.maxEstimatedRevenue}
-                        value={filters.estimatedRevenue || ""}
-                        onChange={(e) => setFilters({ ...filters, estimatedRevenue: e.target.value })}
-                        className="w-full p-2 rounded"
+                        ruler={false}
+                        stepOnly={100}
+                        onChange={(values) => {
+                            setFilters({...filters, minEstimatedRevenue: values.min, maxEstimatedRevenue: values.max});
+                        }}
+                        thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
+                        trackStyle="bg-blue-300 h-1"
+                        rangeStyle="bg-blue-500 h-1"
                     />
-                    <div className="text-center">{filters.estimatedRevenue || "Any"}</div>
                 </div>
 
-                <div>
-                    <label>Company Size</label>
-                    <input
-                        type="range"
+                <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
+                    <label className="block text-center font-bold mb-2">Company Size</label>
+                    <MultiRangeSlider
                         min={distinctFilters.minCompanySize}
                         max={distinctFilters.maxCompanySize}
-                        value={filters.companySize || ""}
-                        onChange={(e) => setFilters({ ...filters, companySize: e.target.value })}
-                        className="w-full p-2 rounded"
+                        ruler={false}
+                        stepOnly={100}
+                        onChange={(values) => {
+                            setFilters({...filters, minCompanySize: values.min, maxCompanySize: values.max});
+                        }}
+                        thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
+                        trackStyle="bg-blue-300 h-1"
+                        rangeStyle="bg-blue-500 h-1"
                     />
-                    <div className="text-center">{filters.companySize || "Any"}</div>
                 </div>
 
                 <div>
