@@ -6,10 +6,12 @@ import apiClient from "@/libs/api";
 export default function ClientSearchTool() {
     const [filters, setFilters] = useState({
         companyName: "",
-        companySize: null,
         industry: [],
-        domain: "",
-        estimatedRevenue: null,
+        domain: [],
+        minEstimatedRevenue: null,
+        maxEstimatedRevenue: null,
+        minCompanySize: null,
+        maxCompanySize: null,
         location: "",
         softwareStack: [],
         hardwareStack: [],
@@ -17,35 +19,32 @@ export default function ClientSearchTool() {
     const [results, setResults] = useState([]);
     const [distinctFilters, setDistinctFilters] = useState({
         industries: [],
+        domains: [],
+        minEstimatedRevenue: [],
+        maxEstimatedRevenue: [],
+        minCompanySize: [],
+        maxCompanySize: [],
         softwareStacks: [],
         hardwareStacks: [],
-        domains: [],
-        companySizes: [],
-        estimatedRevenues: [],
     });
-
+    
     useEffect(() => {
         fetchDistinctFilters();
     }, []);
 
     const fetchDistinctFilters = async () => {
         try {
-            const response = await apiClient.post("/distinct-filters", filters);
+            const response = await apiClient.post("/distinct-filters");
             const data = await response.json();
-
-            // Flatten the arrays
-            const flattenedIndustries = data.industries.flat();
-            const flattenedSoftwareStacks = data.softwareStacks.flat();
-            const flattenedHardwareStacks = data.hardwareStacks.flat();
-            const flattenedDomains = data.domains.flat();
-
-            // Set the flattened arrays to the state
             setDistinctFilters({
-                ...data,
-                industries: flattenedIndustries,
-                softwareStacks: flattenedSoftwareStacks,
-                hardwareStacks: flattenedHardwareStacks,
-                domains: flattenedDomains
+                industries: data.industries,
+                softwareStacks: data.softwareStacks,
+                hardwareStacks: data.hardwareStacks,
+                domains: data.domains,
+                minCompanySize: data.minCompanySize,
+                maxCompanySize: data.maxCompanySize,
+                minEstimatedRevenue: data.minEstimatedRevenue,
+                maxEstimatedRevenue: data.maxEstimatedRevenue
             });
         } catch (error) {
             console.error("Error fetching distinct filters:", error);
