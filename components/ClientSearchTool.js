@@ -75,7 +75,11 @@ export default function ClientSearchTool() {
                 <input
                     type="text"
                     placeholder="Search..."
-                    onChange={handleSearch}
+                    onChange={(e) => {
+                        const newSearch = e.target.value;
+
+                        setFilters({ ...filters, companyName: newSearch });
+                    }}
                     name="companyName"
                     className="w-full p-2 rounded"
                 />
