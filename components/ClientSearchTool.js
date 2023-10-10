@@ -184,23 +184,25 @@ export default function ClientSearchTool() {
                 </div>
 
                 <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
-                    <label className="block text-center font-bold mb-2">Estimated Revenue</label>
-                    <MultiRangeSlider
-                        min={distinctFilters.minEstimatedRevenue}
-                        max={distinctFilters.maxEstimatedRevenue}
-                        ruler={false}
-                        stepOnly={100}
-                        onChange={() => {
-                            const newMin = [...filters.minEstimatedRevenue];
-                            const newMax = [...filters.maxEstimatedRevenue];
-                            
-                            setFilters({ ...filters, minEstimatedRevenue: newMin, maxEstimatedRevenue: newMax })
-                        }}
-                        thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
-                        trackStyle="bg-blue-300 h-1"
-                        rangeStyle="bg-blue-500 h-1"
-                    />
-                </div>
+    <label className="block text-center font-bold mb-2">Estimated Revenue</label>
+    <MultiRangeSlider
+        min={distinctFilters.minEstimatedRevenue}
+        max={distinctFilters.maxEstimatedRevenue}
+        ruler={false}
+        stepOnly={100}
+        onChange={(values) => {
+            const newMin = values.min === distinctFilters.minEstimatedRevenue ? null : values.min;
+            const newMax = values.max === distinctFilters.maxEstimatedRevenue ? null : values.max;
+            
+            if (newMin !== filters.minEstimatedRevenue || newMax !== filters.maxEstimatedRevenue) {
+                setFilters({ ...filters, minEstimatedRevenue: newMin, maxEstimatedRevenue: newMax });
+            }
+        }}
+        thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
+        trackStyle="bg-blue-300 h-1"
+        rangeStyle="bg-blue-500 h-1"
+    />
+</div>
 
 <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
     <label className="block text-center font-bold mb-2">Company Size</label>
