@@ -184,46 +184,56 @@ export default function ClientSearchTool() {
                 </div>
 
                 <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
-    <label className="block text-center font-bold mb-2">Estimated Revenue</label>
-    <MultiRangeSlider
-        min={distinctFilters.minEstimatedRevenue}
-        max={distinctFilters.maxEstimatedRevenue}
-        ruler={false}
-        stepOnly={100}
-        onChange={(values) => {
-            const newMin = values.min === distinctFilters.minEstimatedRevenue ? null : values.min;
-            const newMax = values.max === distinctFilters.maxEstimatedRevenue ? null : values.max;
-            
-            if (newMin !== filters.minEstimatedRevenue || newMax !== filters.maxEstimatedRevenue) {
-                setFilters({ ...filters, minEstimatedRevenue: newMin, maxEstimatedRevenue: newMax });
-            }
-        }}
-        thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
-        trackStyle="bg-blue-300 h-1"
-        rangeStyle="bg-blue-500 h-1"
-    />
-</div>
+                    <label className="block text-center font-bold mb-2">Estimated Revenue</label>
+                    <MultiRangeSlider
+                        min={0}
+                        max={distinctFilters.maxEstimatedRevenue}
+                        ruler={false}
+                        step={10000000}
+                        stepOnly={10000000}
+                        minValue={distinctFilters.minEstimatedRevenue}
+                        maxValue={distinctFilters.maxEstimatedRevenue}
+                        //barLeftColor={"#FFFFFF"}
+                        //barRightColor={"#FFFFFF"}
+                        barInnerColor={"#66CBFE"}
+                        thumbLeftColor={"#FFFFFF"}
+                        thumbRightColor={"#FFFFFF"}
+                        onChange={(values) => {
+                            const newMin = values.minValue;
+                            const newMax = values.maxValue;
+                            
+                            if (newMin !== filters.minEstimatedRevenue || newMax !== filters.maxEstimatedRevenue) {
+                                setFilters({ ...filters, minEstimatedRevenue: newMin, maxEstimatedRevenue: newMax });
+                            }
+                        }}
+                    />
+                </div>
 
-<div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
-    <label className="block text-center font-bold mb-2">Company Size</label>
-    <MultiRangeSlider
-        min={distinctFilters.minCompanySize}
-        max={distinctFilters.maxCompanySize}
-        ruler={false}
-        stepOnly={100}
-        onChange={(values) => {
-            const newMin = values.min === distinctFilters.minCompanySize ? null : values.min;
-            const newMax = values.max === distinctFilters.maxCompanySize ? null : values.max;
-            
-            if (newMin !== filters.minCompanySize || newMax !== filters.maxCompanySize) {
-                setFilters({ ...filters, minCompanySize: newMin, maxCompanySize: newMax });
-            }
-        }}
-        thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
-        trackStyle="bg-blue-300 h-1"
-        rangeStyle="bg-blue-500 h-1"
-    />
-</div>
+                <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
+                    <label className="block text-center font-bold mb-2">Company Size</label>
+                    <MultiRangeSlider
+                        min={0}
+                        max={distinctFilters.maxCompanySize}
+                        ruler={false}
+                        step={100}
+                        stepOnly={100}
+                        minValue={distinctFilters.minCompanySize}
+                        maxValue={distinctFilters.maxCompanySize}
+                        //barLeftColor={"#FFFFFF"}
+                        //barRightColor={"#FFFFFF"}
+                        barInnerColor={"#66CBFE"}
+                        thumbLeftColor={"#FFFFFF"}
+                        thumbRightColor={"#FFFFFF"}
+                        onChange={(values) => {
+                            const newMin = values.minValue;
+                            const newMax = values.maxValue;
+                            
+                            if (newMin !== filters.minCompanySize || newMax !== filters.maxCompanySize) {
+                                setFilters({ ...filters, minCompanySize: newMin, maxCompanySize: newMax });
+                            }
+                        }}
+                    />
+                </div>
 
                 <div>
                     <label>Location</label>
