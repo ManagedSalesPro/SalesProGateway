@@ -55,9 +55,10 @@ export default function ClientSearchTool() {
 
     const handleSearch = async () => {
         try {
-            const response = await apiClient.post("/distinct-filters", filters);
-            const data = await response.json();
-            setResults(data);
+            console.log("Sending request with filters:", filters);
+            const response = await apiClient.post("/search-clients", filters);
+            console.log("Received response:", response);
+            setResults(response);
         } catch (error) {
             console.error("Error searching clients:", error);
         }
@@ -66,6 +67,7 @@ export default function ClientSearchTool() {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFilters(prev => ({ ...prev, [name]: value }));
+        handleSearch(); // Call handleSearch function after updating the filters
     };
 
 
@@ -76,7 +78,7 @@ export default function ClientSearchTool() {
                 <input
                     type="text"
                     placeholder="Search..."
-                    onChange={handleInputChange}
+                    onChange={handleSearch}
                     name="companyName"
                     className="w-full p-2 rounded"
                 />
@@ -102,6 +104,7 @@ export default function ClientSearchTool() {
                                             newIndustry.push(industry);
                                         }
                                         setFilters({ ...filters, industry: newIndustry });
+                                        handleSearch() 
                                     }}
                                 />
                             </div>
@@ -127,6 +130,7 @@ export default function ClientSearchTool() {
                                             newDomain.push(domain);
                                         }
                                         setFilters({ ...filters, domain: newDomain });
+                                        handleSearch() 
                                     }}
                                 />
                             </div>
@@ -152,6 +156,7 @@ export default function ClientSearchTool() {
                                             newStack.push(stack);
                                         }
                                         setFilters({ ...filters, softwareStack: newStack });
+                                        handleSearch();
                                     }}
                                 />
                             </div>
@@ -177,6 +182,7 @@ export default function ClientSearchTool() {
                                             newStack.push(stack);
                                         }
                                         setFilters({ ...filters, hardwareStack: newStack });
+                                        handleSearch() 
                                     }}
                                 />
                             </div>
@@ -193,6 +199,7 @@ export default function ClientSearchTool() {
                         stepOnly={100}
                         onChange={(values) => {
                             setFilters({...filters, minEstimatedRevenue: values.min, maxEstimatedRevenue: values.max});
+                            handleSearch()
                         }}
                         thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
                         trackStyle="bg-blue-300 h-1"
@@ -209,6 +216,7 @@ export default function ClientSearchTool() {
                         stepOnly={100}
                         onChange={(values) => {
                             setFilters({...filters, minCompanySize: values.min, maxCompanySize: values.max});
+                            handleSearch()
                         }}
                         thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
                         trackStyle="bg-blue-300 h-1"
