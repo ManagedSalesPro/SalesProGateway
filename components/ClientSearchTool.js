@@ -29,15 +29,19 @@ export default function ClientSearchTool() {
         softwareStacks: [],
         hardwareStacks: [],
     });
-    
+
     useEffect(() => {
         fetchDistinctFilters();
     }, []);
 
+    useEffect(() => {
+        handleSearch(); // Call handleSearch whenever filters change
+    }, [filters]);
+
     const fetchDistinctFilters = async () => {
         try {
             const response = await apiClient.post("/distinct-filters");
-            
+
             setDistinctFilters({
                 industries: response.industries,
                 softwareStacks: response.softwareStacks,
@@ -46,7 +50,7 @@ export default function ClientSearchTool() {
                 minCompanySize: response.minCompanySize,
                 maxCompanySize: response.maxCompanySize,
                 minEstimatedRevenue: response.minEstimatedRevenue,
-                maxEstimatedRevenue: response.maxEstimatedRevenue
+                maxEstimatedRevenue: response.maxEstimatedRevenue,
             });
         } catch (error) {
             console.error("Error fetching distinct filters:", error);
@@ -63,13 +67,6 @@ export default function ClientSearchTool() {
             console.error("Error searching clients:", error);
         }
     };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFilters(prev => ({ ...prev, [name]: value }));
-        handleSearch(); // Call handleSearch function after updating the filters
-    };
-
 
     return (
         <div className="rounded bg-white shadow-lg p-4">
@@ -104,7 +101,6 @@ export default function ClientSearchTool() {
                                             newIndustry.push(industry);
                                         }
                                         setFilters({ ...filters, industry: newIndustry });
-                                        handleSearch() 
                                     }}
                                 />
                             </div>
@@ -114,7 +110,7 @@ export default function ClientSearchTool() {
 
                 <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
                     <label className="block text-center font-bold mb-2">Domain</label>
-                    <div className="scrollable-box overflow-y-auto max-h-32 pr-4"> {/* Added padding to the right */}
+                    <div className="scrollable-box overflow-y-auto max-h-32 pr-4">
                         {distinctFilters.domains.map(domain => (
                             <div key={domain} className="flex justify-between items-center mb-2">
                                 <span>{domain}</span>
@@ -130,7 +126,6 @@ export default function ClientSearchTool() {
                                             newDomain.push(domain);
                                         }
                                         setFilters({ ...filters, domain: newDomain });
-                                        handleSearch() 
                                     }}
                                 />
                             </div>
@@ -140,7 +135,7 @@ export default function ClientSearchTool() {
 
                 <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
                     <label className="block text-center font-bold mb-2">Software Stack</label>
-                    <div className="scrollable-box overflow-y-auto max-h-32 pr-4"> {/* Added padding to the right */}
+                    <div className="scrollable-box overflow-y-auto max-h-32 pr-4">
                         {distinctFilters.softwareStacks.map(stack => (
                             <div key={stack} className="flex justify-between items-center mb-2">
                                 <span>{stack}</span>
@@ -156,7 +151,6 @@ export default function ClientSearchTool() {
                                             newStack.push(stack);
                                         }
                                         setFilters({ ...filters, softwareStack: newStack });
-                                        handleSearch();
                                     }}
                                 />
                             </div>
@@ -166,7 +160,7 @@ export default function ClientSearchTool() {
 
                 <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
                     <label className="block text-center font-bold mb-2">Hardware Stack</label>
-                    <div className="scrollable-box overflow-y-auto max-h-32 pr-4"> {/* Added padding to the right */}
+                    <div className="scrollable-box overflow-y-auto max-h-32 pr-4">
                         {distinctFilters.hardwareStacks.map(stack => (
                             <div key={stack} className="flex justify-between items-center mb-2">
                                 <span>{stack}</span>
@@ -182,7 +176,6 @@ export default function ClientSearchTool() {
                                             newStack.push(stack);
                                         }
                                         setFilters({ ...filters, hardwareStack: newStack });
-                                        handleSearch() 
                                     }}
                                 />
                             </div>
@@ -197,9 +190,11 @@ export default function ClientSearchTool() {
                         max={distinctFilters.maxEstimatedRevenue}
                         ruler={false}
                         stepOnly={100}
-                        onChange={(values) => {
-                            setFilters({...filters, minEstimatedRevenue: values.min, maxEstimatedRevenue: values.max});
-                            handleSearch()
+                        onChange={() => {
+                            const newMin = [...filters.minEstimatedRevenue];
+                            const newMax = [...filters.maxEstimatedRevenue];
+                            
+                            setFilters({ ...filters, minEstimatedRevenue: newMin, maxEstimatedRevenue: newMax })
                         }}
                         thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
                         trackStyle="bg-blue-300 h-1"
@@ -207,22 +202,26 @@ export default function ClientSearchTool() {
                     />
                 </div>
 
-                <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
-                    <label className="block text-center font-bold mb-2">Company Size</label>
-                    <MultiRangeSlider
-                        min={distinctFilters.minCompanySize}
-                        max={distinctFilters.maxCompanySize}
-                        ruler={false}
-                        stepOnly={100}
-                        onChange={(values) => {
-                            setFilters({...filters, minCompanySize: values.min, maxCompanySize: values.max});
-                            handleSearch()
-                        }}
-                        thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
-                        trackStyle="bg-blue-300 h-1"
-                        rangeStyle="bg-blue-500 h-1"
-                    />
-                </div>
+<div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
+    <label className="block text-center font-bold mb-2">Company Size</label>
+    <MultiRangeSlider
+        min={distinctFilters.minCompanySize}
+        max={distinctFilters.maxCompanySize}
+        ruler={false}
+        stepOnly={100}
+        onChange={(values) => {
+            const newMin = values.min === distinctFilters.minCompanySize ? null : values.min;
+            const newMax = values.max === distinctFilters.maxCompanySize ? null : values.max;
+            
+            if (newMin !== filters.minCompanySize || newMax !== filters.maxCompanySize) {
+                setFilters({ ...filters, minCompanySize: newMin, maxCompanySize: newMax });
+            }
+        }}
+        thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
+        trackStyle="bg-blue-300 h-1"
+        rangeStyle="bg-blue-500 h-1"
+    />
+</div>
 
                 <div>
                     <label>Location</label>
@@ -235,9 +234,9 @@ export default function ClientSearchTool() {
                     />
                 </div>
             </div>    
-
-            <div className="w-[70%]  p-4 space-y-2">
-                {/* Search Results */}
+            
+            {/* Search Results */}
+            <div className="w-[70%] p-4 space-y-2">
                 {results.map((client) => (
                     <div key={client._id} className="p-2 border-b rounded shadow-sm">
                         {client.companyName}
