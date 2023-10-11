@@ -6,12 +6,10 @@ export default function ClientProfileContent({ client }) {
     
     if (!client) return <div>No client selected</div>;
 
+    console.log("Client Data:", client);
     return (
-        <div>
-            <h1>{client.name}</h1>
-            {/* ... (rest of the code to display client details) */}
+        <div className="rounded bg-white shadow-lg p-4 ">
+                <h1>{client.companyName}</h1>
         </div>
-    );
+     );
 }
-
-
