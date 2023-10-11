@@ -15,7 +15,7 @@ export default function ClientProfileContent({ client, onBack }) {
     
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div className="p-4 border rounded space-y-2">
-                    <span className="font-semibold block mb-2">Industry</span>
+                    <span className="font-semibold block mb-2">Industry:</span>
                     <ul>
                         {client.industry.map((ind, index) => (
                             <li key={index}>{ind}</li>
@@ -23,7 +23,7 @@ export default function ClientProfileContent({ client, onBack }) {
                     </ul>
                 </div>
                 <div className="p-4 border rounded space-y-2">
-                    <span className="font-semibold block mb-2">Domain</span>
+                    <span className="font-semibold block mb-2">Domain:</span>
                     <ul>
                         {client.domain.map((dom, index) => (
                             <li key={index}>{dom}</li>
@@ -31,14 +31,25 @@ export default function ClientProfileContent({ client, onBack }) {
                     </ul>
                 </div>
                 <div className="p-4 border rounded">
-                    <span className="font-semibold block mb-2">Location</span>
+                    <span className="font-semibold block mb-2">Location:</span>
                     {client.location}
+                </div>
+            </div>
+    
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div className="p-4 border rounded">
+                    <span className="font-semibold block mb-2">Estimated Revenue:</span>
+                    ${client.estimatedRevenue.toLocaleString()}
+                </div>
+                <div className="p-4 border rounded">
+                    <span className="font-semibold block mb-2">Company Size:</span>
+                    {client.companySize}
                 </div>
             </div>
     
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="p-4 border rounded space-y-2">
-                    <span className="font-semibold block mb-2">Software Stack</span>
+                    <span className="font-semibold block mb-2">Software Stack:</span>
                     <ul>
                         {client.softwareStack.map((software, index) => (
                             <li key={index}>{software}</li>
@@ -46,7 +57,7 @@ export default function ClientProfileContent({ client, onBack }) {
                     </ul>
                 </div>
                 <div className="p-4 border rounded space-y-2">
-                    <span className="font-semibold block mb-2">Hardware Stack</span>
+                    <span className="font-semibold block mb-2">Hardware Stack:</span>
                     <ul>
                         {client.hardwareStack.map((hardware, index) => (
                             <li key={index}>{hardware}</li>
