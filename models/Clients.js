@@ -5,6 +5,10 @@ import toJSON from "./plugins/toJSON";
 const clientsSchema = mongoose.Schema(
   {
     // Define your client schema fields here
+    _id: {
+      type: String,
+      trim: true,
+    },
     companyName: {
       type: String,
       trim: true,

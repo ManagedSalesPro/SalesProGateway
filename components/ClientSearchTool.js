@@ -6,7 +6,7 @@ import MultiRangeSlider from 'multi-range-slider-react';
 import Link from 'next/link';
 
 
-export default function ClientSearchTool() {
+export default function ClientSearchTool({onClientSelect}) {
     const [filters, setFilters] = useState({
         companyName: "",
         industry: [],
@@ -30,6 +30,8 @@ export default function ClientSearchTool() {
         softwareStacks: [],
         hardwareStacks: [],
     });
+
+    const [selectedClientId, setSelectedClientId] = useState(null);;
 
     useEffect(() => {
         fetchDistinctFilters();
@@ -69,6 +71,10 @@ export default function ClientSearchTool() {
         }
     };
 
+    const handleClientClick = (clientId) => {
+        onClientSelect(clientId);
+    };
+    
     return (
         <div className="rounded bg-white shadow-lg p-4 ">
             {/* Search Bar */}
@@ -267,7 +273,10 @@ export default function ClientSearchTool() {
                 <div className="w-[70%] p-4 space-y-2 overflow-y-auto max-h-[500px]"> {/* Adjust max-h value as needed */}
                     {results.map((client) => (
                         <Link href={`/clientprofile/`} >
-                        <div key={client._id} className="p-2 border-b rounded shadow-sm flex justify-between">
+                        <div 
+                            key={client.id} 
+                            className="p-2 border-b rounded shadow-sm flex justify-between"
+                            onClick={() => handleClientClick(client._id)}>
                             {/* Left Side: Company Name, Industry, and Domain */}
                             <div className="flex-1 pr-4">
                                 <div className="font-bold">{client.companyName}</div>
