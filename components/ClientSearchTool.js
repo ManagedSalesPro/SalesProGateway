@@ -5,7 +5,7 @@ import apiClient from "@/libs/api";
 import MultiRangeSlider from 'multi-range-slider-react';
 
 
-export default function ClientSearchTool() {
+export default function ClientSearchTool({ onClientSelect }) {
     const [filters, setFilters] = useState({
         companyName: "",
         industry: [],
@@ -29,15 +29,19 @@ export default function ClientSearchTool() {
         softwareStacks: [],
         hardwareStacks: [],
     });
-    
+
     useEffect(() => {
         fetchDistinctFilters();
     }, []);
 
+    useEffect(() => {
+        handleSearch(); // Call handleSearch whenever filters change
+    }, [filters]);
+
     const fetchDistinctFilters = async () => {
         try {
             const response = await apiClient.post("/distinct-filters");
-            
+
             setDistinctFilters({
                 industries: response.industries,
                 softwareStacks: response.softwareStacks,
@@ -46,7 +50,7 @@ export default function ClientSearchTool() {
                 minCompanySize: response.minCompanySize,
                 maxCompanySize: response.maxCompanySize,
                 minEstimatedRevenue: response.minEstimatedRevenue,
-                maxEstimatedRevenue: response.maxEstimatedRevenue
+                maxEstimatedRevenue: response.maxEstimatedRevenue,
             });
         } catch (error) {
             console.error("Error fetching distinct filters:", error);
@@ -55,186 +59,256 @@ export default function ClientSearchTool() {
 
     const handleSearch = async () => {
         try {
-            const response = await apiClient.post("/distinct-filters", filters);
-            const data = await response.json();
-            setResults(data);
+            console.log("ClientSearchTool - Sending request with filters:", filters);
+            const response = await apiClient.post("/search-clients", filters);
+            console.log("Received response:", response);
+            setResults(response);
         } catch (error) {
             console.error("Error searching clients:", error);
         }
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFilters(prev => ({ ...prev, [name]: value }));
+    const handleClientClick = (clientData) => {
+        onClientSelect(clientData);
     };
-
-
+    
     return (
-        <div className="rounded bg-white shadow-lg p-4">
+        <div className="rounded bg-white shadow-lg p-4 ">
             {/* Search Bar */}
             <div className="mb-4">
                 <input
                     type="text"
-                    placeholder="Search..."
-                    onChange={handleInputChange}
+                    placeholder="Search for a company by name..."
+                    onChange={(e) => {
+                        const newSearch = e.target.value;
+
+                        setFilters({ ...filters, companyName: newSearch });
+                    }}
                     name="companyName"
-                    className="w-full p-2 rounded"
+                    className="w-full p-2 rounded border border-gray-300"
                 />
             </div>
-            <div className="w-[30%] p-4 border-r">
+            
+            {/* Filters & Search Results*/}
+            <div className="rounded bg-white p-4 flex">
+
                 {/* Filters */}
+                <div className="w-[30%] p-4 border-r">
 
-                <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
-                    <label className="block text-center font-bold mb-2">Industry</label>
-                    <div className="scrollable-box overflow-y-auto max-h-32 pr-4"> {/* Added padding to the right */}
-                        {distinctFilters.industries.map(industry => (
-                            <div key={industry} className="flex justify-between items-center mb-2">
-                                <span>{industry}</span>
-                                <input
-                                    type="checkbox"
-                                    value={industry}
-                                    checked={filters.industry.includes(industry)}
-                                    onChange={() => {
-                                        const newIndustry = [...filters.industry];
-                                        if (newIndustry.includes(industry)) {
-                                            newIndustry.splice(newIndustry.indexOf(industry), 1);
-                                        } else {
-                                            newIndustry.push(industry);
-                                        }
-                                        setFilters({ ...filters, industry: newIndustry });
-                                    }}
-                                />
-                            </div>
-                        ))}
+                    {/*Industry*/} 
+                    <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
+                        <label className="block text-center font-bold mb-2">Industry</label>
+                        <div className="scrollable-box overflow-y-auto max-h-32 pr-4"> {/* Added padding to the right */}
+                            {distinctFilters.industries.map(industry => (
+                                <div key={industry} className="flex justify-between items-center mb-2">
+                                    <span>{industry}</span>
+                                    <input
+                                        type="checkbox"
+                                        value={industry}
+                                        checked={filters.industry.includes(industry)}
+                                        onChange={() => {
+                                            const newIndustry = [...filters.industry];
+                                            if (newIndustry.includes(industry)) {
+                                                newIndustry.splice(newIndustry.indexOf(industry), 1);
+                                            } else {
+                                                newIndustry.push(industry);
+                                            }
+                                            setFilters({ ...filters, industry: newIndustry });
+                                        }}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
-                    <label className="block text-center font-bold mb-2">Domain</label>
-                    <div className="scrollable-box overflow-y-auto max-h-32 pr-4"> {/* Added padding to the right */}
-                        {distinctFilters.domains.map(domain => (
-                            <div key={domain} className="flex justify-between items-center mb-2">
-                                <span>{domain}</span>
-                                <input
-                                    type="checkbox"
-                                    value={domain}
-                                    checked={filters.domain.includes(domain)}
-                                    onChange={() => {
-                                        const newDomain = [...filters.domain];
-                                        if (newDomain.includes(domain)) {
-                                            newDomain.splice(newDomain.indexOf(domain), 1);
-                                        } else {
-                                            newDomain.push(domain);
-                                        }
-                                        setFilters({ ...filters, domain: newDomain });
-                                    }}
-                                />
-                            </div>
-                        ))}
+                    {/*Domain*/}
+                    <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
+                        <label className="block text-center font-bold mb-2">Domain</label>
+                        <div className="scrollable-box overflow-y-auto max-h-32 pr-4">
+                            {distinctFilters.domains.map(domain => (
+                                <div key={domain} className="flex justify-between items-center mb-2">
+                                    <span>{domain}</span>
+                                    <input
+                                        type="checkbox"
+                                        value={domain}
+                                        checked={filters.domain.includes(domain)}
+                                        onChange={() => {
+                                            const newDomain = [...filters.domain];
+                                            if (newDomain.includes(domain)) {
+                                                newDomain.splice(newDomain.indexOf(domain), 1);
+                                            } else {
+                                                newDomain.push(domain);
+                                            }
+                                            setFilters({ ...filters, domain: newDomain });
+                                        }}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-
-                <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
-                    <label className="block text-center font-bold mb-2">Software Stack</label>
-                    <div className="scrollable-box overflow-y-auto max-h-32 pr-4"> {/* Added padding to the right */}
-                        {distinctFilters.softwareStacks.map(stack => (
-                            <div key={stack} className="flex justify-between items-center mb-2">
-                                <span>{stack}</span>
-                                <input
-                                    type="checkbox"
-                                    value={stack}
-                                    checked={filters.softwareStack.includes(stack)}
-                                    onChange={() => {
-                                        const newStack = [...filters.softwareStack];
-                                        if (newStack.includes(stack)) {
-                                            newStack.splice(newStack.indexOf(stack), 1);
-                                        } else {
-                                            newStack.push(stack);
-                                        }
-                                        setFilters({ ...filters, softwareStack: newStack });
-                                    }}
-                                />
-                            </div>
-                        ))}
+                    
+                    {/*Software Stack*/}
+                    <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
+                        <label className="block text-center font-bold mb-2">Software Stack</label>
+                        <div className="scrollable-box overflow-y-auto max-h-32 pr-4">
+                            {distinctFilters.softwareStacks.map(softStack => (
+                                <div key={softStack} className="flex justify-between items-center mb-2">
+                                    <span>{softStack}</span>
+                                    <input
+                                        type="checkbox"
+                                        value={softStack}
+                                        checked={filters.softwareStack.includes(softStack)}
+                                        onChange={() => {
+                                            const newSoftStack = [...filters.softwareStack];
+                                            if (newSoftStack.includes(softStack)) {
+                                                newSoftStack.splice(newSoftStack.indexOf(softStack), 1);
+                                            } else {
+                                                newSoftStack.push(softStack);
+                                            }
+                                            setFilters({ ...filters, softwareStack: newSoftStack });
+                                        }}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
-                    <label className="block text-center font-bold mb-2">Hardware Stack</label>
-                    <div className="scrollable-box overflow-y-auto max-h-32 pr-4"> {/* Added padding to the right */}
-                        {distinctFilters.hardwareStacks.map(stack => (
-                            <div key={stack} className="flex justify-between items-center mb-2">
-                                <span>{stack}</span>
-                                <input
-                                    type="checkbox"
-                                    value={stack}
-                                    checked={filters.hardwareStack.includes(stack)}
-                                    onChange={() => {
-                                        const newStack = [...filters.hardwareStack];
-                                        if (newStack.includes(stack)) {
-                                            newStack.splice(newStack.indexOf(stack), 1);
-                                        } else {
-                                            newStack.push(stack);
-                                        }
-                                        setFilters({ ...filters, hardwareStack: newStack });
-                                    }}
-                                />
-                            </div>
-                        ))}
+                    {/*Hardware Stack*/}
+                    <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
+                        <label className="block text-center font-bold mb-2">Hardware Stack</label>
+                        <div className="scrollable-box overflow-y-auto max-h-32 pr-4">
+                            {distinctFilters.hardwareStacks.map(hardStack => (
+                                <div key={hardStack} className="flex justify-between items-center mb-2">
+                                    <span>{hardStack}</span>
+                                    <input
+                                        type="checkbox"
+                                        value={hardStack}
+                                        checked={filters.hardwareStack.includes(hardStack)}
+                                        onChange={() => {
+                                            const newHardStack = [...filters.hardwareStack];
+                                            if (newHardStack.includes(hardStack)) {
+                                                newHardStack.splice(newHardStack.indexOf(hardStack), 1);
+                                            } else {
+                                                newHardStack.push(hardStack);
+                                            }
+                                            setFilters({ ...filters, hardwareStack: newHardStack });
+                                        }}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
-                    <label className="block text-center font-bold mb-2">Estimated Revenue</label>
-                    <MultiRangeSlider
-                        min={distinctFilters.minEstimatedRevenue}
-                        max={distinctFilters.maxEstimatedRevenue}
-                        ruler={false}
-                        stepOnly={100}
-                        onChange={(values) => {
-                            setFilters({...filters, minEstimatedRevenue: values.min, maxEstimatedRevenue: values.max});
-                        }}
-                        thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
-                        trackStyle="bg-blue-300 h-1"
-                        rangeStyle="bg-blue-500 h-1"
-                    />
-                </div>
+                    {/*Estimated Revenue*/}
+                    <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
+                        <label className="block text-center font-bold mb-2">Estimated Revenue</label>
+                        <MultiRangeSlider
+                            id={"EstimatedRevenue"}
+                            min={1}
+                            max={distinctFilters.maxEstimatedRevenue}
+                            ruler={false}
+                            step={10000000}
+                            stepOnly={10000000}
+                            minValue={distinctFilters.minEstimatedRevenue}
+                            maxValue={distinctFilters.maxEstimatedRevenue}
+                            barInnerColor={"#66CBFE"}
+                            thumbLeftColor={"#FFFFFF"}
+                            thumbRightColor={"#FFFFFF"}
+                            onChange={(values) => {
+                                const newEstRevMin = values.minValue;
+                                const newRevRevMax = values.maxValue;
+                                
+                                if (newEstRevMin !== filters.minEstimatedRevenue || newRevRevMax !== filters.maxEstimatedRevenue) {
+                                    setFilters({ ...filters, minEstimatedRevenue: newEstRevMin, maxEstimatedRevenue: newRevRevMax });
+                                }
+                            }}
+                        />
+                    </div>
 
-                <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
-                    <label className="block text-center font-bold mb-2">Company Size</label>
-                    <MultiRangeSlider
-                        min={distinctFilters.minCompanySize}
-                        max={distinctFilters.maxCompanySize}
-                        ruler={false}
-                        stepOnly={100}
-                        onChange={(values) => {
-                            setFilters({...filters, minCompanySize: values.min, maxCompanySize: values.max});
-                        }}
-                        thumbStyle="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-blue-600"
-                        trackStyle="bg-blue-300 h-1"
-                        rangeStyle="bg-blue-500 h-1"
-                    />
-                </div>
+                    {/*Company Size*/}
+                    <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
+                        <label className="block text-center font-bold mb-2">Company Size</label>
+                        <MultiRangeSlider
+                            id={"CompanySize"}
+                            min={1}
+                            max={distinctFilters.maxCompanySize}
+                            ruler={false}
+                            step={100}
+                            stepOnly={100}
+                            minValue={distinctFilters.minCompanySize}
+                            maxValue={distinctFilters.maxCompanySize}
+                            barInnerColor={"#66CBFE"}
+                            thumbLeftColor={"#FFFFFF"}
+                            thumbRightColor={"#FFFFFF"}
+                            onChange={(values) => {
+                                const newCompSizeMin = values.minValue;
+                                const newCompSizeMax = values.maxValue;
+                                
+                                if (newCompSizeMin !== filters.minCompanySize || newCompSizeMax !== filters.maxCompanySize) {
+                                    setFilters({ ...filters, minCompanySize: newCompSizeMin, maxCompanySize: newCompSizeMax });
+                                }
+                            }}
+                        />
+                    </div>
 
-                <div>
-                    <label>Location</label>
-                    <input
-                        type="text"
-                        value={filters.location}
-                        onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-                        placeholder="Enter city"
-                        className="w-full p-2 rounded"
-                    />
-                </div>
-            </div>    
-
-            <div className="w-[70%]  p-4 space-y-2">
+                    {/*Location*/}
+                    <div>
+                        <label>Location</label>
+                        <input
+                            type="text"
+                            value={filters.location}
+                            onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+                            placeholder="Enter city name..."
+                            className="w-full p-2 rounded border border-gray-300"
+                        />
+                    </div>
+                </div>    
+                
                 {/* Search Results */}
-                {results.map((client) => (
-                    <div key={client._id} className="p-2 border-b rounded shadow-sm">
-                        {client.companyName}
-                    </div>
-                ))}
+                <div className="w-[70%] p-4 space-y-2 overflow-y-auto max-h-[500px]"> {/* Adjust max-h value as needed */}
+                    {results.map((client) => (
+                        <div 
+                                key={client.id} 
+                                className="p-2 border-b rounded shadow-sm flex justify-between w-full text-left cursor-pointer hover:bg-gray-100"
+                                onClick={() => handleClientClick(client)} 
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={(e) => e.key === 'Enter' && handleClientClick(client)}
+                            >
+                            {/* Left Side: Company Name, Industry, and Domain */}
+                            <div className="flex-1 pr-4">
+                                <div className="font-bold">{client.companyName}</div>
+                                
+                                <div className="text-sm mt-1">
+                                    <span className="font-semibold">Industry:</span> {client.industry.join(', ')}
+                                </div>
+                                
+                                <div className="text-sm mt-1">
+                                    <span className="font-semibold">Domain:</span> {client.domain.join(', ')}
+                                </div>
+                            </div>
+
+                            {/* Right Side: Location, Hardware Stack, and Software Stack */}
+                            <div className="flex-1">
+                                <div className="text-xs text-gray-500 mb-2">{client.location}</div>
+                                <div className="flex justify-between">
+                                    <div className="flex-1 pr-2">
+                                        <div className="font-semibold mb-1">Hardware Stack</div>
+                                        {client.hardwareStack.map((stack, index) => (
+                                            <div key={index} className="text-sm">{stack}</div>
+                                        ))}
+                                    </div>
+                                    <div className="flex-1 pl-2">
+                                        <div className="font-semibold mb-1">Software Stack</div>
+                                        {client.softwareStack.map((stack, index) => (
+                                            <div key={index} className="text-sm">{stack}</div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
