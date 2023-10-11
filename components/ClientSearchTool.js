@@ -5,7 +5,7 @@ import apiClient from "@/libs/api";
 import MultiRangeSlider from 'multi-range-slider-react';
 
 
-export default function ClientSearchTool() {
+export default function ClientSearchTool({ onClientSelect }) {
     const [filters, setFilters] = useState({
         companyName: "",
         industry: [],
@@ -29,8 +29,6 @@ export default function ClientSearchTool() {
         softwareStacks: [],
         hardwareStacks: [],
     });
-
-    const [selectedClient, setSelectedClient] = useState(null);
 
     useEffect(() => {
         fetchDistinctFilters();
@@ -71,7 +69,7 @@ export default function ClientSearchTool() {
     };
 
     const handleClientClick = (clientData) => {
-        setSelectedClient(clientData);
+        onClientSelect(clientData);
     };
     
     return (
