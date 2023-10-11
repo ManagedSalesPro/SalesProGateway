@@ -59,7 +59,7 @@ export default function ClientSearchTool({ onClientSelect }) {
 
     const handleSearch = async () => {
         try {
-            console.log("Sending request with filters:", filters);
+            console.log("ClientSearchTool - Sending request with filters:", filters);
             const response = await apiClient.post("/search-clients", filters);
             console.log("Received response:", response);
             setResults(response);
@@ -151,21 +151,21 @@ export default function ClientSearchTool({ onClientSelect }) {
                     <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
                         <label className="block text-center font-bold mb-2">Software Stack</label>
                         <div className="scrollable-box overflow-y-auto max-h-32 pr-4">
-                            {distinctFilters.softwareStacks.map(stack => (
-                                <div key={stack} className="flex justify-between items-center mb-2">
-                                    <span>{stack}</span>
+                            {distinctFilters.softwareStacks.map(softStack => (
+                                <div key={softStack} className="flex justify-between items-center mb-2">
+                                    <span>{softStack}</span>
                                     <input
                                         type="checkbox"
-                                        value={stack}
-                                        checked={filters.softwareStack.includes(stack)}
+                                        value={softStack}
+                                        checked={filters.softwareStack.includes(softStack)}
                                         onChange={() => {
-                                            const newStack = [...filters.softwareStack];
-                                            if (newStack.includes(stack)) {
-                                                newStack.splice(newStack.indexOf(stack), 1);
+                                            const newSoftStack = [...filters.softwareStack];
+                                            if (newSoftStack.includes(softStack)) {
+                                                newSoftStack.splice(newSoftStack.indexOf(softStack), 1);
                                             } else {
-                                                newStack.push(stack);
+                                                newSoftStack.push(softStack);
                                             }
-                                            setFilters({ ...filters, softwareStack: newStack });
+                                            setFilters({ ...filters, softwareStack: newSoftStack });
                                         }}
                                     />
                                 </div>
@@ -177,21 +177,21 @@ export default function ClientSearchTool({ onClientSelect }) {
                     <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
                         <label className="block text-center font-bold mb-2">Hardware Stack</label>
                         <div className="scrollable-box overflow-y-auto max-h-32 pr-4">
-                            {distinctFilters.hardwareStacks.map(stack => (
-                                <div key={stack} className="flex justify-between items-center mb-2">
-                                    <span>{stack}</span>
+                            {distinctFilters.hardwareStacks.map(hardStack => (
+                                <div key={hardStack} className="flex justify-between items-center mb-2">
+                                    <span>{hardStack}</span>
                                     <input
                                         type="checkbox"
-                                        value={stack}
-                                        checked={filters.hardwareStack.includes(stack)}
+                                        value={hardStack}
+                                        checked={filters.hardwareStack.includes(hardStack)}
                                         onChange={() => {
-                                            const newStack = [...filters.hardwareStack];
-                                            if (newStack.includes(stack)) {
-                                                newStack.splice(newStack.indexOf(stack), 1);
+                                            const newHardStack = [...filters.hardwareStack];
+                                            if (newHardStack.includes(hardStack)) {
+                                                newHardStack.splice(newHardStack.indexOf(hardStack), 1);
                                             } else {
-                                                newStack.push(stack);
+                                                newHardStack.push(hardStack);
                                             }
-                                            setFilters({ ...filters, hardwareStack: newStack });
+                                            setFilters({ ...filters, hardwareStack: newHardStack });
                                         }}
                                     />
                                 </div>
@@ -203,24 +203,23 @@ export default function ClientSearchTool({ onClientSelect }) {
                     <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
                         <label className="block text-center font-bold mb-2">Estimated Revenue</label>
                         <MultiRangeSlider
-                            min={0}
+                            id={"EstimatedRevenue"}
+                            min={1}
                             max={distinctFilters.maxEstimatedRevenue}
                             ruler={false}
                             step={10000000}
                             stepOnly={10000000}
                             minValue={distinctFilters.minEstimatedRevenue}
                             maxValue={distinctFilters.maxEstimatedRevenue}
-                            //barLeftColor={"#FFFFFF"}
-                            //barRightColor={"#FFFFFF"}
                             barInnerColor={"#66CBFE"}
                             thumbLeftColor={"#FFFFFF"}
                             thumbRightColor={"#FFFFFF"}
                             onChange={(values) => {
-                                const newMin = values.minValue;
-                                const newMax = values.maxValue;
+                                const newEstRevMin = values.minValue;
+                                const newRevRevMax = values.maxValue;
                                 
-                                if (newMin !== filters.minEstimatedRevenue || newMax !== filters.maxEstimatedRevenue) {
-                                    setFilters({ ...filters, minEstimatedRevenue: newMin, maxEstimatedRevenue: newMax });
+                                if (newEstRevMin !== filters.minEstimatedRevenue || newRevRevMax !== filters.maxEstimatedRevenue) {
+                                    setFilters({ ...filters, minEstimatedRevenue: newEstRevMin, maxEstimatedRevenue: newRevRevMax });
                                 }
                             }}
                         />
@@ -230,24 +229,23 @@ export default function ClientSearchTool({ onClientSelect }) {
                     <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
                         <label className="block text-center font-bold mb-2">Company Size</label>
                         <MultiRangeSlider
-                            min={0}
+                            id={"CompanySize"}
+                            min={1}
                             max={distinctFilters.maxCompanySize}
                             ruler={false}
                             step={100}
                             stepOnly={100}
                             minValue={distinctFilters.minCompanySize}
                             maxValue={distinctFilters.maxCompanySize}
-                            //barLeftColor={"#FFFFFF"}
-                            //barRightColor={"#FFFFFF"}
                             barInnerColor={"#66CBFE"}
                             thumbLeftColor={"#FFFFFF"}
                             thumbRightColor={"#FFFFFF"}
                             onChange={(values) => {
-                                const newMin = values.minValue;
-                                const newMax = values.maxValue;
+                                const newCompSizeMin = values.minValue;
+                                const newCompSizeMax = values.maxValue;
                                 
-                                if (newMin !== filters.minCompanySize || newMax !== filters.maxCompanySize) {
-                                    setFilters({ ...filters, minCompanySize: newMin, maxCompanySize: newMax });
+                                if (newCompSizeMin !== filters.minCompanySize || newCompSizeMax !== filters.maxCompanySize) {
+                                    setFilters({ ...filters, minCompanySize: newCompSizeMin, maxCompanySize: newCompSizeMax });
                                 }
                             }}
                         />
@@ -275,7 +273,7 @@ export default function ClientSearchTool({ onClientSelect }) {
                                 onClick={() => handleClientClick(client)} 
                                 role="button"
                                 tabIndex={0}
-                                onkeydown={(e) => e.key === 'Enter' && handleClientClick(client)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleClientClick(client)}
                             >
                             {/* Left Side: Company Name, Industry, and Domain */}
                             <div className="flex-1 pr-4">

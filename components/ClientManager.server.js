@@ -13,13 +13,16 @@ function ClientManager() {
         setSelectedClient(client);
     };
 
-     // If a client is selected, render the ClientProfileContent component
-     if (selectedClient) {
-        return <ClientProfileContent client={selectedClient} />;
+    const handleBackToSearch = () => {
+        setSelectedClient(null);
+    };
+
+    // If a client is selected, render the ClientProfileContent component
+    if (selectedClient) {
+        return <ClientProfileContent client={selectedClient} onBack={handleBackToSearch} />;
     }
 
     // If no client is selected, render the ClientSearchTool component
     return <ClientSearchTool onClientSelect={handleSelectClient} />;
 }
-
 export default ClientManager;
