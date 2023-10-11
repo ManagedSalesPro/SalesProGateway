@@ -2,19 +2,15 @@
 
 import { useEffect, useState } from 'react';
 
-function ClientProfileContent({ clientData }) {
+export default function ClientProfileContent({ client }) {
+    if (!client) return <div>No client selected</div>;
+
     return (
-        <div className="p-4">
-            <p><strong>Client Profile</strong></p>
-            {/* Display client data here */}
-            <div>
-                {/* Display client details using clientData */}
-                <p>Name: {clientData.name}</p>
-                {/* ... (other client details) */}
-            </div>
+        <div>
+            <h1>{client.name}</h1>
+            {/* ... (rest of the code to display client details) */}
         </div>
     );
 }
 
-export default ClientProfileContent;
 

@@ -6,18 +6,18 @@ import ClientProfileContent from "@/components/ClientProfileContent";
 
 
 function ClientManager() {
-  const [selectedClient, setSelectedClient] = useState(null);
+    const [selectedClient, setSelectedClient] = useState(null);
 
-  function handleSelectClient(client) {
-    setSelectedClient(client);
-  }
+    const handleSelectClient = (client) => {
+        setSelectedClient(client);
+    };
 
-  return (
-    <div>
-      <ClientSearchTool onSelectClient={handleSelectClient} />
-      {selectedClient && <ClientProfileContent clientData={selectedClient} />}
-    </div>
-  );
+    return (
+        <div>
+            <ClientSearchTool onSelectClient={handleSelectClient} />
+            <ClientProfileContent client={selectedClient} />
+        </div>
+    );
 }
 
 export default ClientManager;

@@ -272,9 +272,13 @@ export default function ClientSearchTool() {
                 <div className="w-[70%] p-4 space-y-2 overflow-y-auto max-h-[500px]"> {/* Adjust max-h value as needed */}
                     {results.map((client) => (
                         <div 
-                            key={client.id} 
-                            className="p-2 border-b rounded shadow-sm flex justify-between"
-                            onClick={() => handleClientClick(client)} >
+                                key={client.id} 
+                                className="p-2 border-b rounded shadow-sm flex justify-between w-full text-left cursor-pointer hover:bg-gray-100"
+                                onClick={() => handleClientClick(client)} 
+                                role="button"
+                                tabIndex={0}
+                                onKeyPress={(e) => e.key === 'Enter' && handleClientClick(client)}
+                            >
                             {/* Left Side: Company Name, Industry, and Domain */}
                             <div className="flex-1 pr-4">
                                 <div className="font-bold">{client.companyName}</div>
