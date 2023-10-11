@@ -1,17 +1,21 @@
-import ClientSearchTool from "@/components/ClientSearchTool";
-import ClientProfileContent from "@/components/ClientProfileContent";
+// ClientManager.server.js
 
-export default function ClientManager() {
-    let selectedClientData = null;
+import ClientSearchTool from './ClientSearchTool';
+import ClientProfileContent from './ClientProfileContent';
 
-    const handleSelectClient = (clientData) => {
-        selectedClientData = clientData;
-    };
+function ClientManager() {
+  let selectedClient = null;
 
-    return (
-        <>
-            <ClientSearchTool />
-            {selectedClientData && <ClientProfileContent clientData={selectedClientData} />}
-        </>
-    );
+  function handleSelectClient(client) {
+    selectedClient = client;
+  }
+
+  return (
+    <div>
+      <ClientSearchTool onSelectClient={handleSelectClient} />
+      {selectedClient && <ClientProfileContent clientData={selectedClient} />}
+    </div>
+  );
 }
+
+export default ClientManager;
