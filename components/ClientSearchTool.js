@@ -70,11 +70,9 @@ export default function ClientSearchTool() {
         }
     };
 
-    function handleClientClick(client) {
-        // ... any other logic ...
-      
-        props.onSelectClient(client);
-    }
+    const handleClientClick = (clientData) => {
+        setSelectedClient(clientData);
+    };
     
     return (
         <div className="rounded bg-white shadow-lg p-4 ">

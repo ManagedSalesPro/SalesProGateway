@@ -1,13 +1,12 @@
-// ClientManager.server.js
+"use client";
 
-import ClientSearchTool from './ClientSearchTool';
-import ClientProfileContent from './ClientProfileContent';
+import { useState } from 'react';
 
 function ClientManager() {
-  let selectedClient = null;
+  const [selectedClient, setSelectedClient] = useState(null);
 
   function handleSelectClient(client) {
-    selectedClient = client;
+    setSelectedClient(client);
   }
 
   return (
@@ -17,5 +16,3 @@ function ClientManager() {
     </div>
   );
 }
-
-export default ClientManager;
