@@ -275,7 +275,7 @@ export default function ClientSearchTool({ onClientSelect }) {
                                 onClick={() => handleClientClick(client)} 
                                 role="button"
                                 tabIndex={0}
-                                onKeyPress={(e) => e.key === 'Enter' && handleClientClick(client)}
+                                onkeydown={(e) => e.key === 'Enter' && handleClientClick(client)}
                             >
                             {/* Left Side: Company Name, Industry, and Domain */}
                             <div className="flex-1 pr-4">

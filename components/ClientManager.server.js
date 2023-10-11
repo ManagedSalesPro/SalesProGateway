@@ -14,7 +14,7 @@ function ClientManager() {
 
     return (
         <div>
-            <ClientSearchTool onSelectClient={handleSelectClient} />
+            <ClientSearchTool onClientSelect={handleSelectClient} />
             <ClientProfileContent client={selectedClient} />
         </div>
     );

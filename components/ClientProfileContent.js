@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 
 export default function ClientProfileContent({ client }) {
+    
     if (!client) return <div>No client selected</div>;
 
     return (
