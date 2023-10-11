@@ -3,10 +3,9 @@
 import { useState, useEffect } from "react";
 import apiClient from "@/libs/api";
 import MultiRangeSlider from 'multi-range-slider-react';
-import Link from 'next/link';
 
 
-export default function ClientSearchTool({onClientSelect}) {
+export default function ClientSearchTool() {
     const [filters, setFilters] = useState({
         companyName: "",
         industry: [],
@@ -31,7 +30,7 @@ export default function ClientSearchTool({onClientSelect}) {
         hardwareStacks: [],
     });
 
-    const [selectedClientId, setSelectedClientId] = useState(null);;
+    const [selectedClient, setSelectedClient] = useState(null);
 
     useEffect(() => {
         fetchDistinctFilters();
@@ -71,8 +70,8 @@ export default function ClientSearchTool({onClientSelect}) {
         }
     };
 
-    const handleClientClick = (clientId) => {
-        onClientSelect(clientId);
+    const handleClientClick = (clientData) => {
+        setSelectedClient(clientData);
     };
     
     return (
@@ -272,11 +271,10 @@ export default function ClientSearchTool({onClientSelect}) {
                 {/* Search Results */}
                 <div className="w-[70%] p-4 space-y-2 overflow-y-auto max-h-[500px]"> {/* Adjust max-h value as needed */}
                     {results.map((client) => (
-                        <Link href={`/clientprofile/`} >
                         <div 
                             key={client.id} 
                             className="p-2 border-b rounded shadow-sm flex justify-between"
-                            onClick={() => handleClientClick(client._id)}>
+                            onClick={() => handleClientClick(client)} >
                             {/* Left Side: Company Name, Industry, and Domain */}
                             <div className="flex-1 pr-4">
                                 <div className="font-bold">{client.companyName}</div>
@@ -309,7 +307,6 @@ export default function ClientSearchTool({onClientSelect}) {
                                 </div>
                             </div>
                         </div>
-                        </Link>
                     ))}
                 </div>
             </div>
