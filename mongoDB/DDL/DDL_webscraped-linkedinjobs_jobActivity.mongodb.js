@@ -1,13 +1,12 @@
 //Conect to mvp database.
 
-use('mvp');
+use('staging_webscraped');
 
 // Create collection, if it doesn't exist, and insert a document.
 
-db.jobActivity.insertOne
+db.linkedinjobs_jobActivity.insertOne
 (
     {
-        "_id":{"$oid":"656b9ee5c98a9afe1df9fe50"},
         "activityName":"Systems Administration"
     }
 );

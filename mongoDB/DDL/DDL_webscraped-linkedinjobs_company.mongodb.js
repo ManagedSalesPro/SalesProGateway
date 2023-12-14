@@ -1,10 +1,10 @@
 //Conect to mvp database.
 
-use('mvp');
+use('staging_webscraped');
 
 // Create collection, if it doesn't exist, and insert a document.
 
-db.company.insertOne
+db.linkedinjobs_company.insertOne
 (
     {
         "companyName": "Tech Corp",
