@@ -1,4 +1,5 @@
 // MongoDB Atlas Function Code
+// MongoDB Atlas Function Code
 exports = async function() {
   // Reference to the MongoDB service
   const mongodb = context.services.get("mongodb-atlas");
