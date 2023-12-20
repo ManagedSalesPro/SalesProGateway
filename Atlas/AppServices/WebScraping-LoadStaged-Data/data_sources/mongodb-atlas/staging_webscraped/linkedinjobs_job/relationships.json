@@ -1,0 +1,32 @@
+{
+    "companyID": {
+        "ref": "#/relationship/mongodb-atlas/staging_webscraped/linkedinjobs_company",
+        "source_key": "companyID",
+        "foreign_key": "_id",
+        "is_list": false
+    },
+    "jobActivityID": {
+        "ref": "#/relationship/mongodb-atlas/staging_webscraped/linkedinjobs_jobActivity",
+        "source_key": "jobActivityID",
+        "foreign_key": "_id",
+        "is_list": true
+    },
+    "jobHardwareStackID": {
+        "ref": "#/relationship/mongodb-atlas/staging_webscraped/linkedinjobs_jobHardwareStack",
+        "source_key": "jobHardwareStackID",
+        "foreign_key": "_id",
+        "is_list": true
+    },
+    "jobQualificationID": {
+        "ref": "#/relationship/mongodb-atlas/staging_webscraped/linkedinjobs_jobQualification",
+        "source_key": "jobQualificationID",
+        "foreign_key": "_id",
+        "is_list": true
+    },
+    "jobSoftwareStackID": {
+        "ref": "#/relationship/mongodb-atlas/staging_webscraped/linkedinjobs_jobSoftwareStack",
+        "source_key": "jobSoftwareStackID",
+        "foreign_key": "_id",
+        "is_list": true
+    }
+}

@@ -1,0 +1,62 @@
+{
+    "title": "linkedinjobs_job",
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "companyID": {
+            "bsonType": "objectId"
+        },
+        "jobActivityID": {
+            "bsonType": "array",
+            "items": {
+                "bsonType": "objectId"
+            }
+        },
+        "jobCity": {
+            "bsonType": "string"
+        },
+        "jobDescription": {
+            "bsonType": "string"
+        },
+        "jobHardwareStackID": {
+            "bsonType": "array",
+            "items": {
+                "bsonType": "objectId"
+            }
+        },
+        "jobQualificationID": {
+            "bsonType": "array",
+            "items": {
+                "bsonType": "objectId"
+            }
+        },
+        "jobSoftwareStackID": {
+            "bsonType": "array",
+            "items": {
+                "bsonType": "objectId"
+            }
+        },
+        "jobState": {
+            "bsonType": "string"
+        },
+        "jobTitle": {
+            "bsonType": "string"
+        },
+        "jobType": {
+            "bsonType": "string"
+        },
+        "salaryBottom": {
+            "bsonType": "string"
+        },
+        "salaryEst": {
+            "bsonType": "string"
+        },
+        "salaryTop": {
+            "bsonType": "string"
+        }
+    },
+    "required": [
+        "_id"
+    ]
+}
