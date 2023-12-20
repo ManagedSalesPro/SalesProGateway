@@ -2,6 +2,7 @@ import pandas as pd
 from pymongo import MongoClient
 from bson import ObjectId
 
+
 # MongoDB Atlas Connection String and Database Name
 MONGO_URI = 'mongodb+srv://abreham:FxOs0Cji3b7q4PIz@preview.rf8ucdr.mongodb.net/staging_webscraped'
 DATABASE_NAME = 'staging_webscraped'
