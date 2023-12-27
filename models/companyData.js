@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
 
 // COMPANY DATA SCHEMA
+
 const companyDataSchema = mongoose.Schema(
   {
     // Define your company data schema fields here
