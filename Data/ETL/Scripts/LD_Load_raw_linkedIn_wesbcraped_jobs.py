@@ -2,7 +2,6 @@ import pandas as pd
 from pymongo import MongoClient
 from bson import ObjectId
 
-
 # MongoDB Atlas Connection String and Database Name
 MONGO_URI = 'mongodb+srv://abreham:FxOs0Cji3b7q4PIz@preview.rf8ucdr.mongodb.net/staging_webscraped'
 DATABASE_NAME = 'staging_webscraped'
@@ -14,68 +13,63 @@ EXCEL_FILE_PATH = 'Data/ETL/Inputs/clients_firt_100_input_file.xlsx'
 client = MongoClient(MONGO_URI)
 db = client[DATABASE_NAME]
 
+# Function to read excel sheet and return a dataframe
+def read_sheet(excel_path, sheet_name):
+    return pd.read_excel(excel_path, sheet_name=sheet_name)
 
-# Function to Import Data and Create or Retrieve ID Mapping
-def import_data_and_create_mapping(sheet_name, collection_name, db, unique_field):
-    df = pd.read_excel(EXCEL_FILE_PATH, sheet_name=sheet_name)
-    records = df.to_dict(orient='records')
+# Function to check for existing records and use their ObjectId
+def check_and_load(df, collection_name, db, name_field):
     collection = db[collection_name]
-
-    # Insert records and create a mapping from unique_field to MongoDB ObjectId
-    id_mapping = {}
-    for record in records:
-        unique_value = record.get(unique_field)
-        existing_record = collection.find_one({unique_field: unique_value})
+    ids = []
+    for index, row in df.iterrows():
+        existing_record = collection.find_one({name_field: row[name_field]})
         if existing_record:
-            # If record exists, use its ObjectId
-            id_mapping[unique_value] = existing_record['_id']
+            ids.append(existing_record['_id'])
         else:
-            # Insert new record and map its ObjectId
-            result = collection.insert_one(record)
-            id_mapping[unique_value] = result.inserted_id
+            result = collection.insert_one(row.to_dict())
+            ids.append(result.inserted_id)
+    return ids
 
-    return id_mapping
+# Function to update job dataframe with MongoDB ObjectId references
+def update_job_df_with_references(job_df, ref_ids, ref_field, id_field):
+    job_df[ref_field] = job_df[id_field].apply(lambda x: [ref_ids[int(i)-1] for i in str(x).split(',') if i.isdigit()])
 
-# Function to Replace IDs in Job Sheet with MongoDB ObjectIDs
-def replace_ids_with_objectids(df, id_mappings):
-    for col in ['jobSoftwareStackID', 'jobHardwareStackID', 'jobQualificationID', 'jobActivityID','companyID']:
-        if col in df.columns:
-            def process_id(x):
-                if x is None or (isinstance(x, float) and pd.isna(x)):
-                    return []
-                result = []
-                for id_str in str(x).split(','):
-                    id_str = id_str.strip()
-                    if id_str.isdigit():
-                        mapped_id = id_mappings.get(int(id_str))
-                        if mapped_id:
-                            result.append(mapped_id)
-                return result
-            df[col] = df[col].apply(process_id)
+# Function to load data into MongoDB collection
+def load_data(df, collection_name, db):
+    collection = db[collection_name]
+    collection.delete_many({})
+    records = df.to_dict('records')
+    collection.insert_many(records)
 
-    return df
+# Read each sheet into a dataframe
+job_df = read_sheet(EXCEL_FILE_PATH, 'job')
+company_df = read_sheet(EXCEL_FILE_PATH, 'company')
+job_software_stack_df = read_sheet(EXCEL_FILE_PATH, 'jobSoftwareStack')
+job_hardware_stack_df = read_sheet(EXCEL_FILE_PATH, 'jobHardwareStack')
+job_qualification_df = read_sheet(EXCEL_FILE_PATH, 'jobQualification')
+job_activity_df = read_sheet(EXCEL_FILE_PATH, 'jobActivity')
 
+# Remove ID fields from dataframes
+job_df = job_df.drop(columns=['jobID'])  # Exclude jobID as it should not be uploaded
+job_software_stack_df = job_software_stack_df[['softwareName']]
+job_hardware_stack_df = job_hardware_stack_df[['hardwareName']]
+job_qualification_df = job_qualification_df[['qualificationType', 'qualificationName']]
+job_activity_df = job_activity_df[['activityName']]
+company_df = company_df[['companyName', 'companyHQCity', 'companyHQState', 'companyDescription', 'companyWebsiteURL', 'companyEmployeeCount', 'companyIndustry']]
 
+# Check for existing records and get ObjectId references
+software_stack_ids = check_and_load(job_software_stack_df, 'linkedinjobs_jobSoftwareStack', db, 'softwareName')
+hardware_stack_ids = check_and_load(job_hardware_stack_df, 'linkedinjobs_jobHardwareStack', db, 'hardwareName')
+qualification_ids = check_and_load(job_qualification_df, 'linkedinjobs_jobQualification', db, 'qualificationName')
+activity_ids = check_and_load(job_activity_df, 'linkedinjobs_jobActivity', db, 'activityName')
+company_ids = check_and_load(company_df, 'linkedinjobs_company', db, 'companyName')
 
+# Update the job dataframe with the ObjectId references
+update_job_df_with_references(job_df, software_stack_ids, 'jobSoftwareStackID', 'jobSoftwareStackID')
+update_job_df_with_references(job_df, hardware_stack_ids, 'jobHardwareStackID', 'jobHardwareStackID')
+update_job_df_with_references(job_df, qualification_ids, 'jobQualificationID', 'jobQualificationID')
+update_job_df_with_references(job_df, activity_ids, 'jobActivityID', 'jobActivityID')
+update_job_df_with_references(job_df, company_ids, 'companyID', 'companyID')
 
-
-# Import Related Data and Create ID Mappings
-software_stack_mapping = import_data_and_create_mapping('jobSoftwareStack', 'linkedinjobs_jobSoftwareStack', db, 'softwareName')
-hardware_stack_mapping = import_data_and_create_mapping('jobHardwareStack', 'linkedinjobs_jobHardwareStack', db, 'hardwareName')
-qualification_mapping = import_data_and_create_mapping('jobQualification', 'linkedinjobs_jobQualification', db, 'qualificationName')
-activity_stack_mapping = import_data_and_create_mapping('jobActivity', 'linkedinjobs_jobActivity', db, 'activityName')
-company_mapping = import_data_and_create_mapping('company', 'linkedinjobs_company', db, 'CompanyName')
-
-# Import Job Data with Replaced IDs
-job_df = pd.read_excel(EXCEL_FILE_PATH, sheet_name='job')
-job_df = replace_ids_with_objectids(job_df, software_stack_mapping)
-job_df = replace_ids_with_objectids(job_df, hardware_stack_mapping)
-job_df = replace_ids_with_objectids(job_df, qualification_mapping)
-job_df = replace_ids_with_objectids(job_df, activity_stack_mapping)
-job_df = replace_ids_with_objectids(job_df, company_mapping)
-
-job_records = job_df.to_dict(orient='records')
-db.linkedinjobs_job.insert_many(job_records)
-
-# Close MongoDB Connection
-client.close()
+# Load the job data into the MongoDB collection
+load_data(job_df, 'linkedinjobs_job', db)
