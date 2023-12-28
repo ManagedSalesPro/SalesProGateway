@@ -7,7 +7,8 @@ const companyDataSchema = mongoose.Schema(
   {
     // Define your company data schema fields here
     _id: {
-      type: mongoose.Schema.Types.ObjectId, // Using ObjectId type for _id
+      type: String,
+      trim: true,
     },
     companyName: {
       type: String,
@@ -31,12 +32,10 @@ const companyDataSchema = mongoose.Schema(
     hardwareName: {
       type: [String],
       trim: true,
-      default: [],
     },
     softwareName: {
       type: [String],
       trim: true,
-      default: [],
     }
     // Add more fields as needed
   },
