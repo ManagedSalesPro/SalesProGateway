@@ -5,7 +5,7 @@ import CompanyData from "@/models/CompanyData";
 export async function POST() {
   try {
     // Attempt to connect to the MongoDB database
-    await connectMongo();
+    await connectMongo("searchfilter_app_data");
 
     // Perform operations on the "companyData" collection
     const industries = await CompanyData.distinct("companyIndustry");
