@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
+import connectToDatabase from "./connectToDatabase"; // Adjust the path as needed
+
 
 // COMPANY DATA SCHEMA
-
 const companyDataSchema = mongoose.Schema(
   {
     // Define your company data schema fields here
@@ -48,4 +49,9 @@ const companyDataSchema = mongoose.Schema(
 // Add a plugin that converts mongoose to JSON
 companyDataSchema.plugin(toJSON);
 
-export default mongoose.models.CompanyData || mongoose.model("CompanyData", companyDataSchema);
+const getCompanyDataModel = async () => {
+  const db = await connectToDatabase("searchfilter_app_data");
+  return db.model("CompanyData", companyDataSchema);
+};
+
+export default getCompanyDataModel;

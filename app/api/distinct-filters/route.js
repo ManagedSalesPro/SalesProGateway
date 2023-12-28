@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import connectMongo from "@/libs/mongoose"; 
-import CompanyData from "@/models/CompanyData"; 
+import getCompanyDataModel from "@/models/CompanyData"; 
+
 
 export async function POST() {
   try {
     // Attempt to connect to the MongoDB database
-    await connectMongo("searchfilter_app_data");
+    const CompanyData = await getCompanyDataModel();
 
     // Perform operations on the "companyData" collection
     const industries = await CompanyData.distinct("companyIndustry");
@@ -30,8 +30,8 @@ export async function POST() {
       industries,
       softwareStacks,
       hardwareStacks,
-      maxEmployeeCount: maxEmployeeCount[0]?.companyEmployeeCount,
-      minEmployeeCount: minEmployeeCount[0]?.companyEmployeeCount,
+      maxEmployeeCount,
+      minEmployeeCount,
       cityStateLocations: cityStateLocations.map(location => location.cityState),
       stateLocations
     });
