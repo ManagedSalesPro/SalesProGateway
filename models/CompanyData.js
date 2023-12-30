@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
-import connectToDatabase from "/models/connectToDatabase"; // Adjust the path as needed
+import connectToDatabase from "/models/connectToDatabase";
 
 
 // COMPANY DATA SCHEMA
