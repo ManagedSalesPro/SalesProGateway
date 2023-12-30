@@ -32,7 +32,7 @@ export async function POST() {
       hardwareStacks,
       maxEmployeeCount,
       minEmployeeCount,
-      cityStateLocations: cityStateLocations.map(location => location.cityState),
+      cityStateLocations,
       stateLocations
     });
   } catch (error) {
