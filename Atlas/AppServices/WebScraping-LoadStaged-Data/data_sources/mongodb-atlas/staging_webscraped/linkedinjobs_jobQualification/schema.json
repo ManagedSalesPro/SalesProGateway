@@ -1,0 +1,17 @@
+{
+    "title": "linkedinjobs_jobQualification",
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "qualificationName": {
+            "bsonType": "string"
+        },
+        "qualificationType": {
+            "bsonType": "string"
+        }
+    },
+    "required": [
+        "_id"
+    ]
+}
