@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import connectMongo from "@/libs/mongoose";
-import User from "@/models/User";
+import getUserModel from "@/models/User";
 import ProfileNavBar from "@/components/ProfileNavBar";
 import ButtonEditProfile from "@/components/ButtonEditProfile";
 
@@ -9,6 +9,7 @@ import ButtonEditProfile from "@/components/ButtonEditProfile";
 export default async function Profile() {
   await connectMongo();
   const session = await getServerSession(authOptions);
+  const User = await getUserModel();
   const user = await User.findById(session.user.id);
 
   return (
