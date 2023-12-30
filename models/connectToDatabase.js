@@ -17,3 +17,5 @@ const connectToDatabase = async (dbName) => {
 
   return connections[dbName];
 };
+
+export default connectToDatabase;

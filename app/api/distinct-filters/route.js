@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import getCompanyDataModel from "@/models/CompanyData"; 
+import getCompanyDataModel from "/models/CompanyData"; 
 
 
 export async function POST() {
