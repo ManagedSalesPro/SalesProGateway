@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import apiClient from "@/libs/api";
+import Select from 'react-select';
 import MultiRangeSlider from 'multi-range-slider-react';
 
 
@@ -9,25 +10,21 @@ export default function ClientSearchTool({ onClientSelect }) {
     const [filters, setFilters] = useState({
         companyName: "",
         industry: [],
-        domain: [],
-        minEstimatedRevenue: null,
-        maxEstimatedRevenue: null,
-        minCompanySize: null,
-        maxCompanySize: null,
         location: "",
         softwareStack: [],
         hardwareStack: [],
+        minCompanySize: null,
+        maxCompanySize: null,
+
     });
     const [results, setResults] = useState([]);
     const [distinctFilters, setDistinctFilters] = useState({
         industries: [],
-        domains: [],
-        minEstimatedRevenue: [],
-        maxEstimatedRevenue: [],
-        minCompanySize: [],
-        maxCompanySize: [],
         softwareStacks: [],
         hardwareStacks: [],
+        locationOptions: [],
+        minEmployeeCount: 0,
+        maxEmployeeCount: 100000, // Default or an estimated maximum
     });
 
     useEffect(() => {
@@ -42,15 +39,19 @@ export default function ClientSearchTool({ onClientSelect }) {
         try {
             const response = await apiClient.post("/distinct-filters");
 
+            const locationOptions = [
+                ...response.cityStateLocations.map(loc => ({ label: loc, value: loc })),
+                ...response.cityLocations.map(city => ({ label: city, value: city })),
+                ...response.stateLocations.map(state => ({ label: state, value: state }))
+            ];
+
             setDistinctFilters({
                 industries: response.industries,
                 softwareStacks: response.softwareStacks,
                 hardwareStacks: response.hardwareStacks,
-                domains: response.domains,
-                minCompanySize: response.minCompanySize,
-                maxCompanySize: response.maxCompanySize,
-                minEstimatedRevenue: response.minEstimatedRevenue,
-                maxEstimatedRevenue: response.maxEstimatedRevenue,
+                locationOptions,
+                minEmployeeCount: response.minEmployeeCount || 0,
+                maxEmployeeCount: response.maxEmployeeCount || 100000,
             });
         } catch (error) {
             console.error("Error fetching distinct filters:", error);
@@ -121,32 +122,6 @@ export default function ClientSearchTool({ onClientSelect }) {
                         </div>
                     </div>
 
-                    {/*Domain*/}
-                    <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
-                        <label className="block text-center font-bold mb-2">Domain</label>
-                        <div className="scrollable-box overflow-y-auto max-h-32 pr-4">
-                            {distinctFilters.domains.map(domain => (
-                                <div key={domain} className="flex justify-between items-center mb-2">
-                                    <span>{domain}</span>
-                                    <input
-                                        type="checkbox"
-                                        value={domain}
-                                        checked={filters.domain.includes(domain)}
-                                        onChange={() => {
-                                            const newDomain = [...filters.domain];
-                                            if (newDomain.includes(domain)) {
-                                                newDomain.splice(newDomain.indexOf(domain), 1);
-                                            } else {
-                                                newDomain.push(domain);
-                                            }
-                                            setFilters({ ...filters, domain: newDomain });
-                                        }}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    
                     {/*Software Stack*/}
                     <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
                         <label className="block text-center font-bold mb-2">Software Stack</label>
@@ -199,44 +174,18 @@ export default function ClientSearchTool({ onClientSelect }) {
                         </div>
                     </div>
 
-                    {/*Estimated Revenue*/}
-                    <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
-                        <label className="block text-center font-bold mb-2">Estimated Revenue</label>
-                        <MultiRangeSlider
-                            id={"EstimatedRevenue"}
-                            min={1}
-                            max={distinctFilters.maxEstimatedRevenue}
-                            ruler={false}
-                            step={10000000}
-                            stepOnly={10000000}
-                            minValue={distinctFilters.minEstimatedRevenue}
-                            maxValue={distinctFilters.maxEstimatedRevenue}
-                            barInnerColor={"#66CBFE"}
-                            thumbLeftColor={"#FFFFFF"}
-                            thumbRightColor={"#FFFFFF"}
-                            onChange={(values) => {
-                                const newEstRevMin = values.minValue;
-                                const newRevRevMax = values.maxValue;
-                                
-                                if (newEstRevMin !== filters.minEstimatedRevenue || newRevRevMax !== filters.maxEstimatedRevenue) {
-                                    setFilters({ ...filters, minEstimatedRevenue: newEstRevMin, maxEstimatedRevenue: newRevRevMax });
-                                }
-                            }}
-                        />
-                    </div>
-
                     {/*Company Size*/}
                     <div className="rounded border border-gray-300 bg-blue-50 p-2 mb-4">
                         <label className="block text-center font-bold mb-2">Company Size</label>
                         <MultiRangeSlider
                             id={"CompanySize"}
                             min={1}
-                            max={distinctFilters.maxCompanySize}
+                            max={distinctFilters.maxEmployeeCount}
                             ruler={false}
                             step={100}
                             stepOnly={100}
-                            minValue={distinctFilters.minCompanySize}
-                            maxValue={distinctFilters.maxCompanySize}
+                            minValue={distinctFilters.minEmployeeCount}
+                            maxValue={distinctFilters.maxEmployeeCount}
                             barInnerColor={"#66CBFE"}
                             thumbLeftColor={"#FFFFFF"}
                             thumbRightColor={"#FFFFFF"}
@@ -254,11 +203,12 @@ export default function ClientSearchTool({ onClientSelect }) {
                     {/*Location*/}
                     <div>
                         <label>Location</label>
-                        <input
-                            type="text"
-                            value={filters.location}
-                            onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-                            placeholder="Enter city name..."
+                        <Select
+                            options={distinctFilters.locationOptions}
+                            isMulti
+                            onChange={(selectedOptions) =>
+                                setFilters({ ...filters, location: selectedOptions.map(option => option.value) })
+                            }
                             className="w-full p-2 rounded border border-gray-300"
                         />
                     </div>
