@@ -43,6 +43,7 @@ const companyDataSchema = mongoose.Schema(
   {
     timestamps: true,
     toJSON: { virtuals: true },
+    collection: 'companyData' // Explicitly specifying the collection name
   }
 );
 

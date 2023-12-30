@@ -1,31 +1,33 @@
 import { NextResponse } from "next/server";
-import getCompanyDataModel from "/models/CompanyData"; 
-
+import getCompanyDataModel from "/models/CompanyData";
 
 export async function POST() {
   try {
-    // Attempt to connect to the MongoDB database
     const CompanyData = await getCompanyDataModel();
 
-    // Perform operations on the "companyData" collection
     const industries = await CompanyData.distinct("companyIndustry");
     const softwareStacks = await CompanyData.distinct("softwareName");
     const hardwareStacks = await CompanyData.distinct("hardwareName");
 
-    // Find max and min values for companyEmployeeCount
-    const maxEmployeeCount = await CompanyData.find().sort({ companyEmployeeCount: -1 }).limit(1);
-    const minEmployeeCount = await CompanyData.find().sort({ companyEmployeeCount: 1 }).limit(1);
+    // Get only the numerical value for max and min employee count
+    const maxEmployeeCountDoc = await CompanyData.findOne().sort({ companyEmployeeCount: -1 }).limit(1);
+    const minEmployeeCountDoc = await CompanyData.findOne().sort({ companyEmployeeCount: 1 }).limit(1);
+    const maxEmployeeCount = maxEmployeeCountDoc ? maxEmployeeCountDoc.companyEmployeeCount : null;
+    const minEmployeeCount = minEmployeeCountDoc ? minEmployeeCountDoc.companyEmployeeCount : null;
 
-    // Get unique combinations of city and state
+    // Get city and state combinations
     const cityStateLocations = await CompanyData.aggregate([
       { $group: { _id: { city: "$companyHQCity", state: "$companyHQState" } } },
-      { $project: { cityState: { $concat: ["$_id.city", ", ", "$_id.state"] } } }
-    ]);
+      { $project: { cityState: { $concat: ["$_id.city", ", ", "$_id.state"] } } },
+      { $sort: { cityState: 1 } } // Optional: Sort alphabetically
+    ]).then(results => results.map(item => item.cityState));
+
+    // Get unique cities
+    const cityLocations = await CompanyData.distinct("companyHQCity");
 
     // Get unique states
     const stateLocations = await CompanyData.distinct("companyHQState");
 
-    // Respond with the appropriate data
     return NextResponse.json({
       industries,
       softwareStacks,
@@ -33,6 +35,7 @@ export async function POST() {
       maxEmployeeCount,
       minEmployeeCount,
       cityStateLocations,
+      cityLocations,
       stateLocations
     });
   } catch (error) {
