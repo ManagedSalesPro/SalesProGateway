@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
+import connectToDatabase from "/models/connectToDatabase";
+
 
 // USER SCHEMA
 const userSchema = mongoose.Schema(
@@ -41,10 +43,16 @@ const userSchema = mongoose.Schema(
   {
     timestamps: true,
     toJSON: { virtuals: true },
+    collection: 'users' // Explicitly specifying the collection name
   }
 );
 
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
 
-export default mongoose.models.User || mongoose.model("User", userSchema);
+const getUserModel = async () => {
+  const db = await connectToDatabase("Users");
+  return db.model("User", userSchema);
+};
+
+export default getUserModel;
