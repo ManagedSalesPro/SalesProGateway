@@ -5,6 +5,7 @@ import ClientSearchNavBar from "@/components/ClientSearchNavBar";
 import ClientManager from "@/components/ClientManager.server";
 
 
+
 export default async function clientsearch() {
   await connectMongo();
   const session = await getServerSession(authOptions);

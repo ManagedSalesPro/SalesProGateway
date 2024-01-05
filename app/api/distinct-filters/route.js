@@ -1,41 +1,45 @@
 import { NextResponse } from "next/server";
-import connectMongo from "@/libs/mongoose"; // Assuming this properly connects to your MongoDB using Mongoose
-import Clients from "@/models/Clients"; // Import your Mongoose model
+import getCompanyDataModel from "/models/CompanyData";
 
 export async function POST() {
   try {
-    // Connect to MongoDB (assuming your connectMongo function handles this)
-    await connectMongo();
+    const CompanyData = await getCompanyDataModel();
 
-  
-    // Perform your operations on the "clients" collection
-    const industries = await Clients.distinct("industry");
-    const softwareStacks = await Clients.distinct("softwareStack");
-    const hardwareStacks = await Clients.distinct("hardwareStack");
-    const domains = await Clients.distinct("domain");
-    
-     // Find max and min values for estimatedRevenue
-     const maxEstimatedRevenue = await Clients.find().sort({ estimatedRevenue: -1 }).limit(1);
-     const minEstimatedRevenue = await Clients.find().sort({ estimatedRevenue: 1 }).limit(1);
+    const industries = await CompanyData.distinct("companyIndustry");
+    const softwareStacks = await CompanyData.distinct("softwareName");
+    const hardwareStacks = await CompanyData.distinct("hardwareName");
 
-     // Find max and min values for companySize
-     const maxCompanySize = await Clients.find().sort({ companySize: -1 }).limit(1);
-     const minCompanySize = await Clients.find().sort({ companySize: 1 }).limit(1);
+    // Get only the numerical value for max and min employee count
+    const maxEmployeeCountDoc = await CompanyData.findOne().sort({ companyEmployeeCount: -1 }).limit(1);
+    const minEmployeeCountDoc = await CompanyData.findOne().sort({ companyEmployeeCount: 1 }).limit(1);
+    const maxEmployeeCount = maxEmployeeCountDoc ? maxEmployeeCountDoc.companyEmployeeCount : null;
+    const minEmployeeCount = minEmployeeCountDoc ? minEmployeeCountDoc.companyEmployeeCount : null;
 
+    // Get city and state combinations
+    const cityStateLocations = await CompanyData.aggregate([
+      { $group: { _id: { city: "$companyHQCity", state: "$companyHQState" } } },
+      { $project: { cityState: { $concat: ["$_id.city", ", ", "$_id.state"] } } },
+      { $sort: { cityState: 1 } } // Optional: Sort alphabetically
+    ]).then(results => results.map(item => item.cityState));
 
-    // Respond with the appropriate data
-    return NextResponse.json({ 
+    // Get unique cities
+    const cityLocations = await CompanyData.distinct("companyHQCity");
+
+    // Get unique states
+    const stateLocations = await CompanyData.distinct("companyHQState");
+
+    return NextResponse.json({
       industries,
       softwareStacks,
       hardwareStacks,
-      domains,
-      maxEstimatedRevenue: maxEstimatedRevenue[0]?.estimatedRevenue,
-      minEstimatedRevenue: minEstimatedRevenue[0]?.estimatedRevenue,
-      maxCompanySize: maxCompanySize[0]?.companySize,
-      minCompanySize: minCompanySize[0]?.companySize
+      maxEmployeeCount,
+      minEmployeeCount,
+      cityStateLocations,
+      cityLocations,
+      stateLocations
     });
-  } catch (error)  {
-    console.error("Detailed Error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    console.error("Error querying the database:", error);
+    return NextResponse.json({ error: "Database query failed" }, { status: 500 });
   }
 }
