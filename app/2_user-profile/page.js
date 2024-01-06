@@ -13,7 +13,6 @@ export default async function UserProfile() {
   await connectMongo();
   const session = await getServerSession(authOptions);
 
-  
   const User = await getUserModel();
   const user = await User.findById(session.user.id);
 
