@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../libs/next-auth.js";
 import connectMongo from "../../libs/mongoose.js";
-import getUserModel from "../../models/User.js";
-import ProfileNavBar from "./components/ProfileNavBar.js";
+import getUserProfile from "../../models/UserProfile.js";
+import UserProfileMain from "./components/UserProfileMain.js";
 import ButtonEditProfile from "./components/ButtonEditProfile.js";
 
 // To develop and use this in local development env, you will need to pass to mock a user to get their profile information. 
@@ -13,8 +13,9 @@ export default async function UserProfile() {
   await connectMongo();
   const session = await getServerSession(authOptions);
 
-  const User = await getUserModel();
-  const user = await User.findById(session.user.id);
+  const UserProfile = await getUserProfile();
+  const user = await UserProfile.findOne(session.user.email);
+
 
   /*
   // Mock user data
@@ -35,7 +36,7 @@ export default async function UserProfile() {
  
   return (
     <div className="flex h-screen bg-base-300">
-      <ProfileNavBar />
+      <UserProfileMain />
       <main className="flex-1 p-8 pb-24 overflow-y-auto">
         <section className="max-w-xl mx-auto space-y-8">
             <ButtonEditProfile currentUser={user} className="btn btn-primary btn-wide">Edit Your Profile</ButtonEditProfile>

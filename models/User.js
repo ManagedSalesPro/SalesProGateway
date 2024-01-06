@@ -43,7 +43,7 @@ const userSchema = mongoose.Schema(
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    collection: 'user_profile' // Explicitly specifying the collection name
+    collection: 'users' // Explicitly specifying the collection name
   }
 );
 
@@ -51,7 +51,7 @@ const userSchema = mongoose.Schema(
 userSchema.plugin(toJSON);
 
 const getUserModel = async () => {
-  const db = await connectToDatabase("users");
+  const db = await connectToDatabase("auth");
   return db.model("User", userSchema);
 };
 

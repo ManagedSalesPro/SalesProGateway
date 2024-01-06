@@ -18,7 +18,7 @@ const links = [
   },
 ];
 
-const ClientSearchNavBar = () => {
+const SearchToolMain = () => {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -82,4 +82,4 @@ const ClientSearchNavBar = () => {
   );
 };
 
-export default ClientSearchNavBar;
+export default SearchToolMain;

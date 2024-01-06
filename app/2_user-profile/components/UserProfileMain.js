@@ -18,7 +18,7 @@ const links = [
   },
 ];
 
-const ProfileNavBar = () => {
+const UserProfileMain = () => {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -82,4 +82,4 @@ const ProfileNavBar = () => {
   );
 };
 
-export default ProfileNavBar;
+export default UserProfileMain;

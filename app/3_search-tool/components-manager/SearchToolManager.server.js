@@ -5,7 +5,7 @@ import ClientSearchTool from "../components/ClientSearchTool.js";
 import ClientProfileContent from "../components/ClientProfileContent.js";
 
 
-function ClientManager() {
+function SearchToolManager() {
     const [selectedClient, setSelectedClient] = useState(null);
 
     const handleSelectClient = (client) => {
@@ -25,4 +25,4 @@ function ClientManager() {
     // If no client is selected, render the ClientSearchTool component
     return <ClientSearchTool onClientSelect={handleSelectClient} />;
 }
-export default ClientManager;
+export default SearchToolManager;
