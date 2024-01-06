@@ -1,8 +1,8 @@
 import { Inter } from "next/font/google";
-import { getSEOTags } from "@/libs/seo";
-import ClientLayout from "@/components/LayoutClient";
-import config from "@/config";
-import "./globals.css";
+import { getSEOTags } from "../libs/seo.js";
+import ClientLayout from "./components/LayoutClient.js";
+import config from "../config.js";
+import "./settings/globals.css";
 
 const font = Inter({ subsets: ["latin"] });
 
