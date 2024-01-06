@@ -1,10 +1,10 @@
-import BetaSignInPage from "./components/BetaSignInPage.js";
+import SignInPageMain from "./components/SignInPageMain.js";
 
-export default function BetaSignOn() {
+export default function BetaSignIn() {
   return (
     <>
       <main>
-        <BetaSignInPage />
+        <SignInPageMain />
       </main>
     </>
   );

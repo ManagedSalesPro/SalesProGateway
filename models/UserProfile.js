@@ -35,7 +35,7 @@ userProfileSchema.plugin(toJSON);
 
 const getUserProfile = async () => {
   const db = await connectToDatabase("accounts_data");
-  return db.model("UserProfile", userSchema);
+  return db.model("UserProfile", userProfileSchema);
 };
 
 export default getUserProfile;
