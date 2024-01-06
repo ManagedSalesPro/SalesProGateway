@@ -13,11 +13,11 @@ export default async function UserProfile() {
   await connectMongo();
   const session = await getServerSession(authOptions);
 
-  /*
+  
   const User = await getUserModel();
   const user = await User.findById(session.user.id);
-*/
-  
+
+  /*
   // Mock user data
   const mockUser = {
     _id: '651cc972ac3c03abc4e9fdc2',
@@ -32,7 +32,7 @@ export default async function UserProfile() {
   // Assign the mock user data to the user variable
   const user = mockUser;
 
-  
+  */
  
   return (
     <div className="flex h-screen bg-base-300">
