@@ -27,6 +27,14 @@ export default function ClientSearchTool({ onClientSelect }) {
         maxEmployeeCount: 100000, // Default or an estimated maximum
     });
 
+    useEffect(() => {
+        fetchDistinctFilters();
+    }, []);
+
+    useEffect(() => {
+        handleSearch(); // Call handleSearch whenever filters change
+    }, [filters]);
+
     const fetchDistinctFilters = async () => {
         try {
             const response = await apiClient.post("/distinct-filters");
@@ -64,14 +72,6 @@ export default function ClientSearchTool({ onClientSelect }) {
     const handleClientClick = (clientData) => {
         onClientSelect(clientData);
     };
-
-    useEffect(() => {
-        fetchDistinctFilters();
-    }, []);
-
-    useEffect(() => {
-        handleSearch(); // Call handleSearch whenever filters change
-    }, [filters]);
     
     return (
         <div className="rounded bg-white shadow-lg p-4 ">

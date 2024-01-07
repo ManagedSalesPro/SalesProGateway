@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
+import connectToDatabase from "/models/connectToDatabase";
+
 
 // CLIENT SCHEMA
-const clientsSchema = mongoose.Schema(
+const searchResultCompanySchema = mongoose.Schema(
   {
     // Define your client schema fields here
     _id: {
@@ -46,10 +48,16 @@ const clientsSchema = mongoose.Schema(
   {
     timestamps: true,
     toJSON: { virtuals: true },
+    collection: 'user_details' // Explicitly specifying the collection name
   }
 );
 
-// Add a plugin that converts mongoose to JSON
-clientsSchema.plugin(toJSON);
+// add plugin that converts mongoose to json
+searchResultCompanySchema.plugin(toJSON);
 
-export default mongoose.models.Clients || mongoose.model("Clients", clientsSchema);
+const getSearchResultCompanyDataModel = async () => {
+  const db = await connectToDatabase("company_data");
+  return db.model("SearchResultCompany", searchResultCompanySchema);
+};
+
+export default getSearchResultCompanyDataModel;

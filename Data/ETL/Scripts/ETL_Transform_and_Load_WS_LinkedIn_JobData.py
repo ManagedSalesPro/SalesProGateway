@@ -2,13 +2,13 @@
 from pymongo import MongoClient
 
 # MongoDB connection settings
-mongo_uri = "mongodb+srv://abreham:FxOs0Cji3b7q4PIz@preview.rf8ucdr.mongodb.net/staging_webscraped"
+mongo_uri = "mongodb+srv://abreham:FxOs0Cji3b7q4PIz@preview.rf8ucdr.mongodb.net/scrapeddata"
 client = MongoClient(mongo_uri)
 
 # Define source and target databases and collections
-source_db = client.staging_webscraped
-target_db = client.searchfilter_app_data
-target_collection = target_db.companyData
+source_db = client.scrapeddata
+target_db = client.clientdata
+target_collection = target_db.company
 
 # Clear existing data in the target collection (optional)
 target_collection.delete_many({})

@@ -26,7 +26,7 @@ const userProfileSchema = mongoose.Schema(
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    collection: 'user_details' // Explicitly specifying the collection name
+    collection: 'useraccount' // Explicitly specifying the collection name
   }
 );
 
@@ -34,7 +34,7 @@ const userProfileSchema = mongoose.Schema(
 userProfileSchema.plugin(toJSON);
 
 const getUserProfile = async () => {
-  const db = await connectToDatabase("accounts_data");
+  const db = await connectToDatabase("accountdata");
   return db.model("UserProfile", userProfileSchema);
 };
 

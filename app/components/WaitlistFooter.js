@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import config from "../../config.js";
 import logo from "../../SharedImages/icon.png";
 
 // Add the Footer to the bottom of your landing page and more.

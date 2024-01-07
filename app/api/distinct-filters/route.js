@@ -1,32 +1,32 @@
 import { NextResponse } from "next/server";
-import getCompanyDataModel from "/models/CompanyData";
+import getSearchResultCompanyDataModel from "../../../models/SearchResultCompany"; // Import your Mongoose model
 
 export async function POST() {
   try {
-    const CompanyData = await getCompanyDataModel();
+    const CompanySearchResultModel = await getSearchResultCompanyDataModel();
 
-    const industries = await CompanyData.distinct("companyIndustry");
-    const softwareStacks = await CompanyData.distinct("softwareName");
-    const hardwareStacks = await CompanyData.distinct("hardwareName");
+    const industries = await CompanySearchResultModel.distinct("companyIndustry");
+    const softwareStacks = await CompanySearchResultModel.distinct("softwareName");
+    const hardwareStacks = await CompanySearchResultModel.distinct("hardwareName");
 
     // Get only the numerical value for max and min employee count
-    const maxEmployeeCountDoc = await CompanyData.findOne().sort({ companyEmployeeCount: -1 }).limit(1);
-    const minEmployeeCountDoc = await CompanyData.findOne().sort({ companyEmployeeCount: 1 }).limit(1);
+    const maxEmployeeCountDoc = await CompanySearchResultModel.findOne().sort({ companyEmployeeCount: -1 }).limit(1);
+    const minEmployeeCountDoc = await CompanySearchResultModel.findOne().sort({ companyEmployeeCount: 1 }).limit(1);
     const maxEmployeeCount = maxEmployeeCountDoc ? maxEmployeeCountDoc.companyEmployeeCount : null;
     const minEmployeeCount = minEmployeeCountDoc ? minEmployeeCountDoc.companyEmployeeCount : null;
 
     // Get city and state combinations
-    const cityStateLocations = await CompanyData.aggregate([
+    const cityStateLocations = await CompanySearchResultModel.aggregate([
       { $group: { _id: { city: "$companyHQCity", state: "$companyHQState" } } },
       { $project: { cityState: { $concat: ["$_id.city", ", ", "$_id.state"] } } },
       { $sort: { cityState: 1 } } // Optional: Sort alphabetically
     ]).then(results => results.map(item => item.cityState));
 
     // Get unique cities
-    const cityLocations = await CompanyData.distinct("companyHQCity");
+    const cityLocations = await CompanySearchResultModel.distinct("companyHQCity");
 
     // Get unique states
-    const stateLocations = await CompanyData.distinct("companyHQState");
+    const stateLocations = await CompanySearchResultModel.distinct("companyHQState");
 
     return NextResponse.json({
       industries,

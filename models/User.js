@@ -43,7 +43,7 @@ const userSchema = mongoose.Schema(
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    collection: 'users' // Explicitly specifying the collection name
+    collection: 'nextauth_users' // Explicitly specifying the collection name
   }
 );
 

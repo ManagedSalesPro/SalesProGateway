@@ -8,7 +8,6 @@ import SearchToolManager from "./components-manager/SearchToolManager.server.js"
 
 export default async function ClientSearch() {
   await connectMongo();
-  const session = await getServerSession(authOptions);
 
   return (
       <div className="flex h-screen bg-base-300">

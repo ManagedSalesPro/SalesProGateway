@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
-import connectMongo from "@/libs/mongoose";
-import Clients from "@/models/Clients";
+import getSearchResultCompanyDataModel from "../../../models/SearchResultCompany"; // Import your Mongoose model
 
 export async function POST(req) {
     try {
-        await connectMongo();
         const filters = await req.json();
 
         const query = {};
@@ -55,11 +53,11 @@ export async function POST(req) {
             };
         }
 
-        // Fetch clients based on the query
-        const clients = await Clients.find(query);
+        // Fetch companies based on the query
+        const CompanySearchResults = await getSearchResultCompanyDataModel.find(query);
 
         // Respond with the search results
-        return NextResponse.json(clients);
+        return NextResponse.json(CompanySearchResults);
     } catch (error) {
         console.error("Error searching clients:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
