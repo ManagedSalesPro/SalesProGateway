@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 
 # MongoDB Atlas Connection String and Database Name
-MONGO_URI = 'mongodb+srv://abreham:FxOs0Cji3b7q4PIz@preview.rf8ucdr.mongodb.net/scrapeddata'
+MONGO_URI = 'mongodb+srv://abreham:FxOs0Cji3b7q4PIz@development.zlsu7dq.mongodb.net/scrapeddata'
 DATABASE_NAME = 'scrapeddata'
 
 # Excel File Path

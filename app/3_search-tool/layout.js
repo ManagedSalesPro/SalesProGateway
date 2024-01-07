@@ -14,7 +14,6 @@ import config from "../../config.js";
 
 export default async function LayoutPrivate({ children }) {
   const session = await getServerSession(authOptions);
-
   
   if (!session) {
     redirect(config.auth.loginUrl);

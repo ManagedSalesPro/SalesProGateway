@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { toast } from "react-hot-toast";
 import apiClient from '../../../libs/api.js';
 
-const ButtonUpdateProfile = ({ currentUser }) => {
+const UpdateProfile = ({ currentUser }) => {
   const inputRef = useRef(null);
   const [editedUser, setEditedUser] = useState({ ...currentUser, email: currentUser.email });
   const [isLoading, setIsLoading] = useState(false);
@@ -55,4 +55,4 @@ const ButtonUpdateProfile = ({ currentUser }) => {
   );
 };
 
-export default ButtonUpdateProfile;
+export default UpdateProfile;

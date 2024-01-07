@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from 'react';
-import ClientSearchTool from "../components/ClientSearchTool.js";
-import ClientProfileContent from "../components/ClientProfileContent.js";
+import SearchTool from "../client-components/SearchTool.js";
+import SelectedSearchResult from "../server-components/SelectedSearchResult.js";
 
 
 function SearchToolManager() {
@@ -19,10 +19,10 @@ function SearchToolManager() {
 
     // If a client is selected, render the ClientProfileContent component
     if (selectedClient) {
-        return <ClientProfileContent client={selectedClient} onBack={handleBackToSearch} />;
+        return <SelectedSearchResult client={selectedClient} onBack={handleBackToSearch} />;
     }
 
     // If no client is selected, render the ClientSearchTool component
-    return <ClientSearchTool onClientSelect={handleSelectClient} />;
+    return <SearchTool onClientSelect={handleSelectClient} />;
 }
 export default SearchToolManager;

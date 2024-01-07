@@ -48,7 +48,7 @@ const searchResultCompanySchema = mongoose.Schema(
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    collection: 'user_details' // Explicitly specifying the collection name
+    collection: 'company' // Explicitly specifying the collection name
   }
 );
 
@@ -56,7 +56,7 @@ const searchResultCompanySchema = mongoose.Schema(
 searchResultCompanySchema.plugin(toJSON);
 
 const getSearchResultCompanyDataModel = async () => {
-  const db = await connectToDatabase("company_data");
+  const db = await connectToDatabase("clientdata");
   return db.model("SearchResultCompany", searchResultCompanySchema);
 };
 

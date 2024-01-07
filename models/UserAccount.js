@@ -4,7 +4,7 @@ import connectToDatabase from "/models/connectToDatabase";
 
 
 // USER SCHEMA
-const userProfileSchema = mongoose.Schema(
+const userAccountSchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -31,11 +31,11 @@ const userProfileSchema = mongoose.Schema(
 );
 
 // add plugin that converts mongoose to json
-userProfileSchema.plugin(toJSON);
+userAccountSchema.plugin(toJSON);
 
-const getUserProfileDataModel = async () => {
+const getUserAccountDataModel = async () => {
   const db = await connectToDatabase("accountdata");
-  return db.model("UserProfile", userProfileSchema);
+  return db.model("UserAccount", userAccountSchema);
 };
 
-export default getUserProfileDataModel;
+export default getUserAccountDataModel;
