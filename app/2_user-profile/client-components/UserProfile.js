@@ -3,10 +3,19 @@
 
 import { useState } from 'react';
 import UpdateProfile from '../server-components/UpdateProfile.js';
+import { useSession } from "next-auth/react";
 
-const UserProfile = ({ currentUser }) => {
+const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
 
+  const { data: session, status } = useSession();  
+  const currentUser = session?.user; // This will have the user details
+
+  // Check if the session is still loading
+  if (status === "loading") {
+    return <p>Loading...</p>; // or any other loading state representation
+  }
+  
   return (
     <div className="max-w-lg mx-auto my-10 bg-white rounded-lg shadow-md p-5">
       {isEditing ? (
