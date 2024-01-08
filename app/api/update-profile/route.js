@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
-import connectMongo from "@/libs/mongoose";
-import User from "@/models/User";
+import getUserProfileDataModel from "../../../models/UserProfile.js";
 
 // This route is used to update the logged in users profile.
 // The API call is initiated by <ButtonEditProfile /> component
 // Duplicate emails just return 200 OK
 export async function POST(req) {
-  await connectMongo();
 
   const body = await req.json();
 
@@ -15,19 +13,23 @@ export async function POST(req) {
   }
 
   try {
-    const user = await User.findOne({ email: body.email });
 
-    if (!user) {
+    const UserProfileDataModel = await getUserProfileDataModel();
+    const UserProfile = await UserProfileDataModel.findOne({ email: body.email });
+    if (!UserProfile) {
       // Provide more context in the error message
       return NextResponse.json({ error: `User with email ${body.email} not found` }, { status: 404 });
     }
 
-    // Update user details
-    Object.keys(body).forEach((key) => {
-      user[key] = body[key];
-    });
+    // Update user's useraccount document.
+    if (body.name) {
+      UserProfile.name = body.name;
+    }
+    if (body.company) {
+      UserProfile.company = body.company;
+    }
 
-    await user.save();
+    await UserProfile.save();
 
     return NextResponse.json({});
   } catch (e) {

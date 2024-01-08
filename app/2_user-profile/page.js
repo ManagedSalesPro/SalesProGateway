@@ -2,7 +2,7 @@ import connectMongo from "../../libs/mongoose.js";
 import PageSkeleton from "./client-components/PageSkeleton.js";
 import UserProfile from "./client-components/UserProfile.js";
 
-export default async function ClientSearch() {
+export default async function Pg_UserProfile() {
   await connectMongo();
 
   return (

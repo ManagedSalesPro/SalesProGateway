@@ -1,31 +1,51 @@
 // components/ButtonEditProfile.js
 "use client";
 
-import { useState } from 'react';
-import UpdateProfile from '../server-components/UpdateProfile.js';
+import { useState, useEffect } from 'react';
 import { useSession } from "next-auth/react";
+import ShowUserProfile from '../server-components/ShowUserProfile.js';
+import UpdateUserProfile from '../server-components/UpdateUserProfile.js';
 
 const UserProfile = () => {
-  const [isEditing, setIsEditing] = useState(false);
-
   const { data: session, status } = useSession();  
-  const currentUser = session?.user; // This will have the user details
 
-  // Check if the session is still loading
-  if (status === "loading") {
-    return <p>Loading...</p>; // or any other loading state representation
-  }
+  const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessionUser, setSessionUser] = useState(null);
   
+  
+  useEffect(() => {
+    if (session?.user) {
+      setSessionUser(session.user);
+      setIsLoading(false);
+    } else if (status !== "loading") {
+      // Handle case where there is no session (e.g., user not logged in)
+      setIsLoading(true);
+    }
+  }, [session, 
+      status,
+      sessionUser?.user]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="loading loading-spinner loading-xs"></span>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-lg mx-auto my-10 bg-white rounded-lg shadow-md p-5">
-      {isEditing ? (
-        <UpdateProfile currentUser={currentUser} />
-      ) : (
+      {sessionUser && (
         <>
-          <h2 className="text-center text-2xl font-semibold mt-3">{currentUser.name ? currentUser.name : "No name available"}</h2>
-          <p className="text-center text-gray-600 mt-1">{currentUser.company ? currentUser.company : "No company name available"}</p>
-          <p className="text-center text-gray-500 mt-1">{currentUser.email}</p> {/* Displaying the user's email */}
-          <button onClick={() => setIsEditing(true)} className="btn btn-primary btn-block mx-auto mt-5">Edit Profile</button>
+          {isEditing ? (
+            <UpdateUserProfile currentUser={sessionUser} />
+          ) : (
+            <>
+              <ShowUserProfile currentUser={sessionUser} />
+              <button onClick={() => setIsEditing(true)} className="btn btn-primary btn-block mx-auto mt-5">Edit Profile</button>
+            </>
+          )}
         </>
       )}
     </div>
