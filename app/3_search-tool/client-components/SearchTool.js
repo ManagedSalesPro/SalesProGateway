@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import apiClient from "../../../libs/api.js";
 import Select from 'react-select';
 import MultiRangeSlider from 'multi-range-slider-react';
@@ -33,7 +33,7 @@ export default function ClientSearchTool({ onClientSelect }) {
 
     useEffect(() => {
         handleSearch(); // Call handleSearch whenever filters change
-    }, [filters]);
+    }, [handleSearch]);
 
     const fetchDistinctFilters = async () => {
         try {
@@ -58,7 +58,7 @@ export default function ClientSearchTool({ onClientSelect }) {
         }
     };
 
-    const handleSearch = async () => {
+    const handleSearch = useCallback(async () => {
         try {
             console.log("ClientSearchTool - Sending request with filters:", filters);
             const response = await apiClient.post("/search-clients", filters);
@@ -67,7 +67,7 @@ export default function ClientSearchTool({ onClientSelect }) {
         } catch (error) {
             console.error("Error searching clients:", error);
         }
-    };
+    }, [filters]); // dependencies of handleSearch
 
     const handleClientClick = (clientData) => {
         onClientSelect(clientData);

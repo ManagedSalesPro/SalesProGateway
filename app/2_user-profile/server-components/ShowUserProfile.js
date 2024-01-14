@@ -1,14 +1,14 @@
 // components/ButtonUpdateProfile.js
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import apiClient from '../../../libs/api.js';
 
 export default function ShowUserProfile ({ currentUser }) {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getUserProfile = async () => {
+  const getUserProfile = useCallback(async () => {
     setIsLoading(true);
     try {
       const email = currentUser.email;
@@ -28,11 +28,12 @@ export default function ShowUserProfile ({ currentUser }) {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [currentUser?.email]); // dependencies of getUserProfile
 
   useEffect(() => {
+    setIsLoading(true);
     getUserProfile();
-  }, [currentUser?.email]);
+  }, [getUserProfile]);
 
   return(
     <>
