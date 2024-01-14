@@ -7,7 +7,7 @@ MONGO_URI = 'mongodb+srv://abreham:FxOs0Cji3b7q4PIz@development.zlsu7dq.mongodb.
 DATABASE_NAME = 'scrapeddata'
 
 # Excel File Path
-EXCEL_FILE_PATH = 'Data/ETL/Inputs/clients_firt_100_input_file.xlsx'
+EXCEL_FILE_PATH = 'Data/ETL/Inputs/AIMWebScraped_LinkedInJobs_1000.xlsx'
 
 # Establish MongoDB Connection
 client = MongoClient(MONGO_URI)
@@ -51,7 +51,6 @@ def update_job_df_with_references(job_df, ref_ids, ref_field, id_field):
 # Function to load data into MongoDB collection
 def load_data(df, collection_name, db):
     collection = db[collection_name]
-    collection.delete_many({})
     records = df.to_dict('records')
     collection.insert_many(records)
 
