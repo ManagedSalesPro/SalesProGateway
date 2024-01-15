@@ -95,10 +95,10 @@ export async function POST(req) {
 
       case "customer.subscription.updated": {
         // The customer might have changed the plan (higher or lower plan, cancel soon etc...)
-        const subscription = await stripe.subscriptions.retrieve(
-          data.object.id
-        );
-        const planId = subscription?.items?.data[0]?.price?.id;
+        //const subscription = await stripe.subscriptions.retrieve(
+        //  data.object.id
+        //);
+        //const planId = subscription?.items?.data[0]?.price?.id;
         // Do any operation here
         break;
       }

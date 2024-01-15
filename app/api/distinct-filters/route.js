@@ -1,37 +1,54 @@
 import { NextResponse } from "next/server";
-import getCompanyDataModel from "/models/CompanyData";
+import getSearchResultCompanyDataModel from "../../../models/SearchResultCompany"; // Import your Mongoose model
 
 export async function POST() {
   try {
-    const CompanyData = await getCompanyDataModel();
+    const CompanySearchResultModel = await getSearchResultCompanyDataModel();
 
-    const industries = await CompanyData.distinct("companyIndustry");
-    const softwareStacks = await CompanyData.distinct("softwareName");
-    const hardwareStacks = await CompanyData.distinct("hardwareName");
+    // Filter out null values from distinct queries
+    const industries = (await CompanySearchResultModel.distinct("companyIndustry")).filter(Boolean);
+    const softwareName = (await CompanySearchResultModel.distinct("softwareName")).filter(Boolean);
+    const hardwareName = (await CompanySearchResultModel.distinct("hardwareName")).filter(Boolean);
 
     // Get only the numerical value for max and min employee count
-    const maxEmployeeCountDoc = await CompanyData.findOne().sort({ companyEmployeeCount: -1 }).limit(1);
-    const minEmployeeCountDoc = await CompanyData.findOne().sort({ companyEmployeeCount: 1 }).limit(1);
-    const maxEmployeeCount = maxEmployeeCountDoc ? maxEmployeeCountDoc.companyEmployeeCount : null;
-    const minEmployeeCount = minEmployeeCountDoc ? minEmployeeCountDoc.companyEmployeeCount : null;
+    const maxEmployeeCountDoc = await CompanySearchResultModel.findOne().sort({ companyEmployeeCount: -1 }).limit(1);
+    const minEmployeeCountDoc = await CompanySearchResultModel.findOne().sort({ companyEmployeeCount: 1 }).limit(1);
+    const maxEmployeeCount = maxEmployeeCountDoc ? maxEmployeeCountDoc.companyEmployeeCount : 0; // Default to 0 if null
+    const minEmployeeCount = minEmployeeCountDoc ? minEmployeeCountDoc.companyEmployeeCount : 0; // Default to 0 if null
 
     // Get city and state combinations
-    const cityStateLocations = await CompanyData.aggregate([
+    const cityStateLocations = (await CompanySearchResultModel.aggregate([
       { $group: { _id: { city: "$companyHQCity", state: "$companyHQState" } } },
-      { $project: { cityState: { $concat: ["$_id.city", ", ", "$_id.state"] } } },
+      { 
+        $project: { 
+          cityState: {
+            $cond: {
+              if: { $and: ["$_id.city", "$_id.state"] },
+              then: { $concat: [{ $toString: "$_id.city" }, ", ", { $toString: "$_id.state" }] },
+              else: {
+                $cond: {
+                  if: "$_id.city",
+                  then: { $toString: "$_id.city" },
+                  else: { $toString: "$_id.state" }
+                }
+              }
+            }
+          } 
+        } 
+      },
       { $sort: { cityState: 1 } } // Optional: Sort alphabetically
-    ]).then(results => results.map(item => item.cityState));
+    ])).filter(item => item.cityState && item.cityState !== 'NaN').map(item => item.cityState); // Filter out invalid values
 
-    // Get unique cities
-    const cityLocations = await CompanyData.distinct("companyHQCity");
 
-    // Get unique states
-    const stateLocations = await CompanyData.distinct("companyHQState");
+    // Filter out null values from distinct queries
+    const cityLocations = (await CompanySearchResultModel.distinct("companyHQCity")).filter(Boolean);
+    const stateLocations = (await CompanySearchResultModel.distinct("companyHQState")).filter(Boolean);
+
 
     return NextResponse.json({
       industries,
-      softwareStacks,
-      hardwareStacks,
+      softwareName,
+      hardwareName,
       maxEmployeeCount,
       minEmployeeCount,
       cityStateLocations,

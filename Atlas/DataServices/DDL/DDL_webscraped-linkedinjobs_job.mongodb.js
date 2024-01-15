@@ -1,6 +1,5 @@
-//Conect to mvp database.
-
-use('staging_webscraped');
+//Conect to scrapeddata database.
+use('scrapeddata');
 
 // Create collection, if it doesn't exist, and insert a document.
 

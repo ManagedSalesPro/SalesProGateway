@@ -2,12 +2,15 @@ import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import config from "@/config";
-import connectMongo from "./mongo";
+import connectMongo from "./connectToAuthDB";
+import getUserAccountDataModel from "../models/UserAccount.js"
+
 
 export const authOptions = {
   // Set any random key in .env.local
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
+    /*
     GoogleProvider({
       // Follow the "Login with Google" tutorial to get your credentials
       clientId: process.env.GOOGLE_ID,
@@ -21,7 +24,7 @@ export const authOptions = {
           createdAt: new Date(),
         };
       },
-    }),
+    }),*/
     // Follow the "Login with Email" tutorial to set up your email server
     // Requires a MongoDB database. Set MONOGODB_URI env variable.
     ...(connectMongo
@@ -39,10 +42,24 @@ export const authOptions = {
   ...(connectMongo && { adapter: MongoDBAdapter(connectMongo) }),
 
   callbacks: {
-    session: async ({ session, token }) => {
+    async session({ session, token }) {
+
+      console.log("Session callback called.");
+      try
+      {
+        const UserAccountModel = await getUserAccountDataModel();
+        const UserAccount = await UserAccountModel.findOne({ email: session.user.email });
+
+        if (!UserAccount) {
+          await UserAccountModel.create({ email: session.user.email, name: '', company: '' });
+        }
+      } catch (error) {
+        console.error("Error creating user in accountdata database:", error);
+      }
       if (session?.user) {
         session.user.id = token.sub;
       }
+
       return session;
     },
   },
