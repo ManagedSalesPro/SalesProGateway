@@ -2,29 +2,6 @@ import Link from "next/link";
 import { getSEOTags } from "../../libs/seo.js";
 import config from "../../config.js";
 
-// CHATGPT PROMPT TO GENERATE YOUR TERMS & SERVICES — replace with your own data 👇
-
-// 1. Go to https://app.chatgpt.com/
-// 2. Copy paste bellow
-// 3. Replace the data with your own (if needed)
-// 4. Paste the answer from ChatGPT directly in the <pre> tag below
-
-// You are an excellent layer.
-
-// I need your help to write a simple Terms & Services for my website. Here is some context:
-// - Website: https://shipfa.st
-// - Name: ShipFast
-// - Contact information: marc@shipfa.st
-// - Description: A JavaScript code boilerplate to help entrepreneurs launch their startups faster
-// - Ownership: when buying a package, users can download code to create apps. They own the code but they do not have the right to resell it. They can ask for a full refund within 7 day after the purchase.
-// - User data collected: name, email and payment information
-// - Non-personal data collection: web cookies
-// - Link to privacy-policy: https://shipfa.st/privacy-policy
-// - Governing Law: France
-// - Updates to the Terms: users will be updated by email
-
-// Please write a simple Terms & Services for my site. Add the current date. Do not add or explain your reasoning. Answer:
-
 export const metadata = getSEOTags({
   title: `Terms and Conditions | ${config.appName}`,
   canonicalUrlRelative: "/tos",
@@ -57,39 +34,39 @@ const TOS = () => {
           className="leading-relaxed whitespace-pre-wrap"
           style={{ fontFamily: "sans-serif" }}
         >
-          {`Last Updated: September 26, 2023
+          {`Last Updated: 2024-01-14
 
-Welcome to ManagedSalesPro!
+Introduction
 
-These Terms of Service ("Terms") govern your use of the ManagedSalesPro website at https://shipfa.st ("Website") and the services provided by ShipFast. By using our Website and services, you agree to these Terms.
+ManagedSalesPro ("we" or "us") is committed to protecting your privacy. This Privacy Policy outlines how we collect, use, and safeguard your personal and non-personal information when you visit our website and use our services.
 
-1. Description of ManagedSalesPro
+Information We Collect
 
-ManagedSalesPro is a platform that offers a JavaScript code boilerplate to assist entrepreneurs in launching their startups more efficiently.
+We collect the following types of information:
 
-2. Ownership and Usage Rights
+Personal Data: When you use our website, we may collect your name, email, and payment information solely for the purpose of order processing.
 
-When you purchase a package from ManagedSalesPro, you gain the right to download and use the code provided for creating applications. You own the code you create but do not have the right to resell it. We offer a full refund within 7 days of purchase, as specified in our refund policy.
+Non-Personal Data: We use web cookies to gather non-personal information about your visit, such as your browsing habits and preferences. These cookies help us enhance your user experience.
 
-3. User Data and Privacy
+Purpose of Data Collection
 
-We collect and store user data, including name, email, and payment information, as necessary to provide our services. For details on how we handle your data, please refer to our Privacy Policy at https://shipfa.st/privacy-policy.
+We collect your personal data solely for the purpose of processing orders and providing you with our services. We use non-personal data to improve our website's functionality and tailor content to your preferences.
 
-4. Non-Personal Data Collection
+Data Sharing
 
-We use web cookies to collect non-personal data for the purpose of improving our services and user experience.
+We do not share your personal data with any third parties. Your information is kept confidential and used only for the purposes mentioned in this policy.
 
-5. Governing Law
+Children's Privacy
 
-These Terms are governed by the laws of France.
+We do not knowingly collect any data from children under the age of 13. Our services are intended for individuals who are at least 13 years old or older.
 
-6. Updates to the Terms
+Updates to the Privacy Policy
 
-We may update these Terms from time to time. Users will be notified of any changes via email.
+We may update this Privacy Policy from time to time. Users will be notified of any changes via email.
 
-For any questions or concerns regarding these Terms of Service, please contact us at marc@shipfa.st.
+Contact Information
 
-Thank you for using ManagedSalesPro!`}
+If you have any questions or concerns about our Privacy Policy or the data we collect, please contact us at abreham@adgroup.enterprises`}
         </pre>
       </div>
     </main>
