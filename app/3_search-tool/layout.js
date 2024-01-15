@@ -19,6 +19,5 @@ export default async function LayoutPrivate({ children }) {
     redirect(config.auth.loginUrl);
   }
   
- 
   return <>{children}</>;
 }

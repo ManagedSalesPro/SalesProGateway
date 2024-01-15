@@ -5,8 +5,7 @@ import apiClient from "../../../libs/api.js";
 import Select from 'react-select';
 import MultiRangeSlider from 'multi-range-slider-react';
 
-
-export default function ClientSearchTool({ onClientSelect }) {
+const ClientSearchTool = ({ onClientSelect }) => {
     // State to track if the component is mounted
     const [isMounted, setIsMounted] = useState(false);
     
@@ -270,3 +269,5 @@ export default function ClientSearchTool({ onClientSelect }) {
         </div>
     );
 }
+
+export default ClientSearchTool;

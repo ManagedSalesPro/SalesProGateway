@@ -1,9 +1,8 @@
-// components/ButtonEditProfile.js
 "use client";
 
 import { useState, useEffect } from 'react';
 import { useSession } from "next-auth/react";
-import ShowUserProfile from '../server-components/ShowUserProfile.js';
+import ShowUserProfile from './ShowUserProfile.js';
 import UpdateUserProfile from '../server-components/UpdateUserProfile.js';
 
 const UserProfile = () => {
@@ -12,7 +11,6 @@ const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [sessionUser, setSessionUser] = useState(null);
-  
   
   useEffect(() => {
     if (session?.user) {
