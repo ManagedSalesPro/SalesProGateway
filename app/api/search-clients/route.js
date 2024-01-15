@@ -54,7 +54,7 @@ export async function POST(req) {
         }
 
         // Fetch companies based on the query
-        const CompanySearchResultsDataModel = await getUserProfileDataModel();
+        const CompanySearchResultsDataModel = await getSearchResultCompanyDataModel();
         const CompanySearchResults = await CompanySearchResultsDataModel.find(query);
 
         // Respond with the search results
