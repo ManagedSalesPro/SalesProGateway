@@ -15,31 +15,27 @@ const searchResultCompanySchema = mongoose.Schema(
       type: String,
       trim: true,
     },
-    companySize: {
+    companyEmployeeCount: {
       type: Number,
       trim: true,
     },
-    industry: {
+    companyIndustry: {
       type: [String],
       trim: true,
     },
-    domain: {
-      type: [String],
-      trim: true,
-    },
-    estimatedRevenue: {
-      type: Number,
-      trim: true,
-    },
-    location: {
+    companyHQCity: {
       type: String,
       trim: true,
     },
-    softwareStack: {
+    companyHQState: {
+      type: String,
+      trim: true,
+    },
+    softwareName: {
       type: [String],
       trim: true,
     },
-    hardwareStack: {
+    hardwareName: {
       type: [String],
       trim: true,
     }
