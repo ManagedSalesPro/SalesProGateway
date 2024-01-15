@@ -15,8 +15,8 @@ const ClientSearchTool = ({ onClientSelect }) => {
         location: "",
         softwareStack: [],
         hardwareStack: [],
-        minCompanySize: null,
-        maxCompanySize: null,
+        minCompanySize: 0,
+        maxCompanySize: 1000,
 
     });
     const [results, setResults] = useState([]);
@@ -28,18 +28,6 @@ const ClientSearchTool = ({ onClientSelect }) => {
         minEmployeeCount: 0,
         maxEmployeeCount: 100000, // Default or an estimated maximum
     });
-
-    useEffect(() => {
-        // Check if the component is mounted for the first time
-        if (!isMounted) {
-            fetchDistinctFilters();
-            setIsMounted(true); // Set the mounted state to true
-        }
-    }, [isMounted]); // Dependency array includes isMounted
-
-    useEffect(() => {
-        handleSearch(); // Call handleSearch whenever filters change
-    }, [handleSearch]);
 
     const fetchDistinctFilters = async () => {
         try {
@@ -78,6 +66,18 @@ const ClientSearchTool = ({ onClientSelect }) => {
     const handleClientClick = (clientData) => {
         onClientSelect(clientData);
     };
+
+    useEffect(() => {
+        // Check if the component is mounted for the first time
+        if (!isMounted) {
+            fetchDistinctFilters();
+            setIsMounted(true); // Set the mounted state to true
+        }
+    }, [isMounted]); // Dependency array includes isMounted
+
+    useEffect(() => {
+        handleSearch(); // Call handleSearch whenever filters change
+    }, [handleSearch]);
     
     return (
         <div className="rounded bg-white shadow-lg p-4 ">
