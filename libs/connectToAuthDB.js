@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 // We don't use it anywhere else in the API routes—we use mongoose.js instead (to be able to use models)
 // See /libs/nextauth.js file.
 
-const uri = process.env.MONGODB_URI.concat("/next-auth")
+const uri = `${process.env.MONGODB_URI}/next-auth`
 const options = {};
 
 let client;
