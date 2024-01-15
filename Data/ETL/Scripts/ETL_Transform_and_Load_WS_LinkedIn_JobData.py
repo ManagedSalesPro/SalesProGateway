@@ -2,13 +2,16 @@
 from pymongo import MongoClient
 
 # MongoDB connection settings
-mongo_uri = "mongodb+srv://abreham:FxOs0Cji3b7q4PIz@preview.rf8ucdr.mongodb.net/staging_webscraped"
-client = MongoClient(mongo_uri)
+source_mongo_uri = 'mongodb+srv://abreham:FxOs0Cji3b7q4PIz@development.zlsu7dq.mongodb.net/scrapeddata'
+target_mongo_uri = 'mongodb+srv://abreham:FxOs0Cji3b7q4PIz@development.zlsu7dq.mongodb.net/clientdata'
+
+source_client = MongoClient(source_mongo_uri)
+target_client = MongoClient(target_mongo_uri)
 
 # Define source and target databases and collections
-source_db = client.staging_webscraped
-target_db = client.searchfilter_app_data
-target_collection = target_db.companyData
+source_db = source_client.scrapeddata
+target_db = target_client.clientdata
+target_collection = target_db.company
 
 # Clear existing data in the target collection (optional)
 target_collection.delete_many({})
@@ -56,6 +59,8 @@ for company_document in source_db.linkedinjobs_company.find():
     target_collection.insert_one(company_data)
 
 # Close the MongoDB client connection
-client.close()
+source_client.close()
+target_client.close()
+
 
 print("Data transfer completed.")

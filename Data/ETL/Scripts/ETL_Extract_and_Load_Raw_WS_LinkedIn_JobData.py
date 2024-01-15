@@ -3,11 +3,11 @@ from pymongo import MongoClient
 from bson import ObjectId
 
 # MongoDB Atlas Connection String and Database Name
-MONGO_URI = 'mongodb+srv://abreham:FxOs0Cji3b7q4PIz@preview.rf8ucdr.mongodb.net/staging_webscraped'
-DATABASE_NAME = 'staging_webscraped'
+MONGO_URI = 'mongodb+srv://abreham:FxOs0Cji3b7q4PIz@development.zlsu7dq.mongodb.net/scrapeddata'
+DATABASE_NAME = 'scrapeddata'
 
 # Excel File Path
-EXCEL_FILE_PATH = 'Data/ETL/Inputs/clients_firt_100_input_file.xlsx'
+EXCEL_FILE_PATH = 'Data/ETL/Inputs/AIMWebScraped_LinkedInJobs_1000.xlsx'
 
 # Establish MongoDB Connection
 client = MongoClient(MONGO_URI)
@@ -32,12 +32,25 @@ def check_and_load(df, collection_name, db, name_field):
 
 # Function to update job dataframe with MongoDB ObjectId references
 def update_job_df_with_references(job_df, ref_ids, ref_field, id_field):
-    job_df[ref_field] = job_df[id_field].apply(lambda x: [ref_ids[int(i)-1] for i in str(x).split(',') if i.isdigit()])
+    def safe_ref_lookup(x):
+        if pd.isna(x):
+            return []
+        result = []
+        for i in str(x).split(','):
+            if i.isdigit():
+                idx = int(i) - 1  # Convert to zero-based index
+                if 0 <= idx < len(ref_ids):
+                    result.append(ref_ids[idx])
+                else:
+                    # Handle out-of-range index
+                    print(f"Warning: Index {idx} out of range for value {x}")
+                    result.append(None)
+        return result
+    job_df[ref_field] = job_df[id_field].apply(safe_ref_lookup)
 
 # Function to load data into MongoDB collection
 def load_data(df, collection_name, db):
     collection = db[collection_name]
-    collection.delete_many({})
     records = df.to_dict('records')
     collection.insert_many(records)
 
