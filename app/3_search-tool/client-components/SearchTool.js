@@ -244,8 +244,13 @@ const ClientSearchTool = ({ onClientSelect }) => {
                             {/* Right Side: Location, Hardware Stack, and Software Stack */}
                             <div className="flex-1">
                                 <div className="text-xs text-gray-500 mb-2">
-                                {client.companyHQCity && client.companyHQState ? `${client.companyHQCity}, ${client.companyHQState}` :
-                                client.companyHQCity || client.companyHQState || ''}
+                                {client.companyHQCity && typeof client.companyHQCity === 'string' && client.companyHQState && typeof client.companyHQState === 'string' 
+                                    ? `${client.companyHQCity}, ${client.companyHQState}` 
+                                    : client.companyHQCity && typeof client.companyHQCity === 'string' 
+                                        ? client.companyHQCity 
+                                        : client.companyHQState && typeof client.companyHQState === 'string' 
+                                            ? client.companyHQState 
+                                            : ''}
                                 </div>
                                 <div className="flex justify-between">
                                     <div className="flex-1 pr-2">

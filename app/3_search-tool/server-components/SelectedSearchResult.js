@@ -17,33 +17,27 @@ export default function ClientProfileContent({ client, onBack }) {
                 <div className="p-4 border rounded space-y-2">
                     <span className="font-semibold block mb-2">Industry:</span>
                     <ul>
-                        {client.industry.map((ind, index) => (
+                        {client.companyIndustry.map((ind, index) => (
                             <li key={index}>{ind}</li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="p-4 border rounded space-y-2">
-                    <span className="font-semibold block mb-2">Domain:</span>
-                    <ul>
-                        {client.domain.map((dom, index) => (
-                            <li key={index}>{dom}</li>
                         ))}
                     </ul>
                 </div>
                 <div className="p-4 border rounded">
                     <span className="font-semibold block mb-2">Location:</span>
-                    {client.location}
+                    {client.companyHQCity && typeof client.companyHQCity === 'string' && client.companyHQState && typeof client.companyHQState === 'string' 
+                                    ? `${client.companyHQCity}, ${client.companyHQState}` 
+                                    : client.companyHQCity && typeof client.companyHQCity === 'string' 
+                                        ? client.companyHQCity 
+                                        : client.companyHQState && typeof client.companyHQState === 'string' 
+                                            ? client.companyHQState 
+                                            : ''}
                 </div>
             </div>
     
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="p-4 border rounded">
-                    <span className="font-semibold block mb-2">Estimated Revenue:</span>
-                    ${client.estimatedRevenue.toLocaleString()}
-                </div>
-                <div className="p-4 border rounded">
                     <span className="font-semibold block mb-2">Company Size:</span>
-                    {client.companySize}
+                    {client.companyEmployeeCount ? `${client.companyEmployeeCount} employees` : 'Not specified'}
                 </div>
             </div>
     
@@ -51,7 +45,7 @@ export default function ClientProfileContent({ client, onBack }) {
                 <div className="p-4 border rounded space-y-2">
                     <span className="font-semibold block mb-2">Software Stack:</span>
                     <ul>
-                        {client.softwareStack.map((software, index) => (
+                        {client.softwareName.map((software, index) => (
                             <li key={index}>{software}</li>
                         ))}
                     </ul>
@@ -59,7 +53,7 @@ export default function ClientProfileContent({ client, onBack }) {
                 <div className="p-4 border rounded space-y-2">
                     <span className="font-semibold block mb-2">Hardware Stack:</span>
                     <ul>
-                        {client.hardwareStack.map((hardware, index) => (
+                        {client.hardwareName.map((hardware, index) => (
                             <li key={index}>{hardware}</li>
                         ))}
                     </ul>
