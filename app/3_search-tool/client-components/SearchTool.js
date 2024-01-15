@@ -7,6 +7,9 @@ import MultiRangeSlider from 'multi-range-slider-react';
 
 
 export default function ClientSearchTool({ onClientSelect }) {
+    // State to track if the component is mounted
+    const [isMounted, setIsMounted] = useState(false);
+    
     const [filters, setFilters] = useState({
         companyName: "",
         industry: [],
@@ -28,8 +31,12 @@ export default function ClientSearchTool({ onClientSelect }) {
     });
 
     useEffect(() => {
-        fetchDistinctFilters();
-    }, []);
+        // Check if the component is mounted for the first time
+        if (!isMounted) {
+            fetchDistinctFilters();
+            setIsMounted(true); // Set the mounted state to true
+        }
+    }, [isMounted]); // Dependency array includes isMounted
 
     useEffect(() => {
         handleSearch(); // Call handleSearch whenever filters change
