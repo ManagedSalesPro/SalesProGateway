@@ -18,7 +18,6 @@ db = client[TARGET_DB]
 # Excel File Path
 EXCEL_FILE_PATH = 'Data/ETL/Inputs/AIMWebScraped_LinkedInJobs_1000.xlsx'
 
-
 # Function to read excel sheet and return a dataframe
 def read_sheet(excel_path, sheet_name):
     return pd.read_excel(excel_path, sheet_name=sheet_name)
