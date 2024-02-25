@@ -1,17 +1,23 @@
 # Connect to MongoDB Atlas
 from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
 
-# MongoDB connection settings
-source_mongo_uri = 'mongodb+srv://abreham:FxOs0Cji3b7q4PIz@development.zlsu7dq.mongodb.net/scrapeddata'
-target_mongo_uri = 'mongodb+srv://abreham:FxOs0Cji3b7q4PIz@development.zlsu7dq.mongodb.net/clientdata'
 
-source_client = MongoClient(source_mongo_uri)
-target_client = MongoClient(target_mongo_uri)
+# Load environment variables
+load_dotenv(dotenv_path='.env.local')
 
-# Define source and target databases and collections
-source_db = source_client.scrapeddata
-target_db = target_client.clientdata
-target_collection = target_db.company
+# MongoDB Atlas Connection String and Database Name
+MONGO_URI = os.getenv('MONGODB_URI')
+SOURCE_DB = os.getenv('SCRAPEPEDDATA_DB')
+TARGET_DB = os.getenv('CLIENTDATA_DB')
+TARGET_COL = os.getenv('CLIENTDATA_COMPANY_COL')
+
+# Establish MongoDB Connection
+client = MongoClient(MONGO_URI)
+source_db = client[SOURCE_DB]
+target_db = client[TARGET_DB]
+target_collection = target_db[TARGET_COL]
 
 # Clear existing data in the target collection (optional)
 target_collection.delete_many({})
@@ -59,8 +65,6 @@ for company_document in source_db.linkedinjobs_company.find():
     target_collection.insert_one(company_data)
 
 # Close the MongoDB client connection
-source_client.close()
-target_client.close()
-
+client.close()
 
 print("Data transfer completed.")

@@ -1,17 +1,23 @@
 import pandas as pd
 from pymongo import MongoClient
 from bson import ObjectId
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv(dotenv_path='.env.local')
 
 # MongoDB Atlas Connection String and Database Name
-MONGO_URI = 'mongodb+srv://abreham:FxOs0Cji3b7q4PIz@development.zlsu7dq.mongodb.net/scrapeddata'
-DATABASE_NAME = 'scrapeddata'
+MONGO_URI = os.getenv('MONGODB_URI')
+TARGET_DB = os.getenv('SCRAPEPEDDATA_DB')
+
+# Establish MongoDB Connection
+client = MongoClient(MONGO_URI)
+db = client[TARGET_DB]
 
 # Excel File Path
 EXCEL_FILE_PATH = 'Data/ETL/Inputs/AIMWebScraped_LinkedInJobs_1000.xlsx'
 
-# Establish MongoDB Connection
-client = MongoClient(MONGO_URI)
-db = client[DATABASE_NAME]
 
 # Function to read excel sheet and return a dataframe
 def read_sheet(excel_path, sheet_name):
