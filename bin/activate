@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/abreham/ManagedSalesPro"
+VIRTUAL_ENV="/home/abreham/SalesProGateway"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
@@ -55,9 +55,9 @@ fi
 
 if [ -z "${VIRTUAL_ENV_DISABLE_PROMPT:-}" ] ; then
     _OLD_VIRTUAL_PS1="${PS1:-}"
-    PS1="(ManagedSalesPro) ${PS1:-}"
+    PS1="(SalesProGateway) ${PS1:-}"
     export PS1
-    VIRTUAL_ENV_PROMPT="(ManagedSalesPro) "
+    VIRTUAL_ENV_PROMPT="(SalesProGateway) "
     export VIRTUAL_ENV_PROMPT
 fi
 
