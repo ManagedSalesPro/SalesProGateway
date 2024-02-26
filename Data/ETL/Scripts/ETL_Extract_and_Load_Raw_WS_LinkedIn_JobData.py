@@ -8,11 +8,11 @@ import os
 load_dotenv(dotenv_path='.env.local')
 
 # MongoDB Atlas Connection String and Database Name
-MONGO_URI = os.getenv('MONGODB_URI')
+MONGODB_URI = os.getenv('MONGODB_URI')
 TARGET_DB = os.getenv('SCRAPEPEDDATA_DB')
 
 # Establish MongoDB Connection
-client = MongoClient(MONGO_URI)
+client = MongoClient(MONGODB_URI)
 db = client[TARGET_DB]
 
 # Excel File Path

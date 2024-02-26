@@ -19,7 +19,15 @@ jobs:
           pip install -r Data/ETL/Scripts/requirements.txt
           
       - name: Run ETL Script 1
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          SCRAPEPEDDATA_DB: ${{ secrets.SCRAPEPEDDATA_DB }}
         run: python Data/ETL/Scripts/ETL_Extract_and_Load_Raw_WS_LinkedIn_JobData.py
 
       - name: Run ETL Script 2
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          SCRAPEPEDDATA_DB: ${{ secrets.SCRAPEPEDDATA_DB }}
+          CLIENTDATA_DB: ${{ secrets.CLIENTDATA_DB }}
+          CLIENTDATA_COMPANY_COL: ${{ secrets.CLIENTDATA_COMPANY_COL }}
         run: python Data/ETL/Scripts/ETL_Extract_and_Load_Raw_WS_LinkedIn_JobData.py

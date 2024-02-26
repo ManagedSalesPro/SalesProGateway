@@ -8,13 +8,13 @@ import os
 load_dotenv(dotenv_path='.env.local')
 
 # MongoDB Atlas Connection String and Database Name
-MONGO_URI = os.getenv('MONGODB_URI')
+MONGODB_URI = os.getenv('MONGODB_URI')
 SOURCE_DB = os.getenv('SCRAPEPEDDATA_DB')
 TARGET_DB = os.getenv('CLIENTDATA_DB')
 TARGET_COL = os.getenv('CLIENTDATA_COMPANY_COL')
 
 # Establish MongoDB Connection
-client = MongoClient(MONGO_URI)
+client = MongoClient(MONGODB_URI)
 source_db = client[SOURCE_DB]
 target_db = client[TARGET_DB]
 target_collection = target_db[TARGET_COL]
