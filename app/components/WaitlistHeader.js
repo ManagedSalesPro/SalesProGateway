@@ -5,14 +5,14 @@ import { useSearchParams } from "next/navigation";
 import ButtonLead from "./ButtonLead.js";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../../SharedImages/icon.png";
-import config from "../../config.js";
+import logo from "@/app/icon.png";
+import config from "@/config";
 
 const links = [
   
 ];
 
-<ButtonLead className="btn btn-primary btn-wide">Join The Waitlist</ButtonLead>
+<ButtonLead className="btn btn-primary btn-wide">Beta Sign In</ButtonLead>
 
 
 // A header with a logo on the left, links in the center (like Pricing, etc...), and a CTA (like Get Started or Login) on the right.
