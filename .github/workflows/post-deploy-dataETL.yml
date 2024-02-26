@@ -1,7 +1,7 @@
-name: Post-Deployment ETL Execution
+name: Post-Deployment ETL Execution - Preview Branch
 
 on:
-  deployment_status:
+  workflow_dispatch:
 
 jobs:
   run-etl-script:
