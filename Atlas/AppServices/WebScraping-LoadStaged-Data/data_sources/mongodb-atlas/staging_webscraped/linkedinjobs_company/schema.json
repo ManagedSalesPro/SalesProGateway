@@ -1,0 +1,43 @@
+{
+    "title": "linkedinjobs_company",
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "companyDescription": {
+            "bsonType": "string"
+        },
+        "companyEmployeeCount": {
+            "bsonType": "int"
+        },
+        "companyHQCity": {
+            "bsonType": "string"
+        },
+        "companyHQState": {
+            "bsonType": "string"
+        },
+        "companyIndustry": {
+            "bsonType": "string"
+        },
+        "companyLogo": {
+            "bsonType": "object",
+            "properties": {
+                "format": {
+                    "bsonType": "string"
+                },
+                "image": {
+                    "bsonType": "string"
+                }
+            }
+        },
+        "companyName": {
+            "bsonType": "string"
+        },
+        "companyWebsiteURL": {
+            "bsonType": "string"
+        }
+    },
+    "required": [
+        "_id"
+    ]
+}

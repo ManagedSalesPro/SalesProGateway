@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
-import User from "@/models/User";
 
-const connectMongo = async () => {
+const connectMongo = async (dbName) => {
   if (!process.env.MONGODB_URI) {
     throw new Error(
       "Add the MONGODB_URI environment variable inside .env.local to use mongoose"
     );
   }
+  const dbUri = dbName ? `${process.env.MONGODB_URI}/${dbName}` : `${process.env.MONGODB_URI}/next-auth`;
   return mongoose
-    .connect(process.env.MONGODB_URI, {
+    .connect(dbUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })

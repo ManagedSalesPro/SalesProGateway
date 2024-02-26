@@ -1,0 +1,14 @@
+{
+    "title": "linkedinjobs_jobHardwareStack",
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "hardwareName": {
+            "bsonType": "string"
+        }
+    },
+    "required": [
+        "_id"
+    ]
+}

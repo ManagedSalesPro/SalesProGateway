@@ -1,0 +1,14 @@
+{
+    "title": "linkedinjobs_jobActivity",
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "activityName": {
+            "bsonType": "string"
+        }
+    },
+    "required": [
+        "_id"
+    ]
+}

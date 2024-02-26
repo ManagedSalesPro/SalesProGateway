@@ -1,0 +1,14 @@
+{
+    "title": "linkedinjobs_jobSoftwareStack",
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "softwareName": {
+            "bsonType": "string"
+        }
+    },
+    "required": [
+        "_id"
+    ]
+}

@@ -1,0 +1,38 @@
+{
+    "title": "transformed_company",
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "employeeCount": {
+            "bsonType": "double"
+        },
+        "hardware": {
+            "bsonType": "array",
+            "items": {
+                "bsonType": "string"
+            }
+        },
+        "headquartersCity": {
+            "bsonType": "string"
+        },
+        "headquartersState": {
+            "bsonType": "string"
+        },
+        "industry": {
+            "bsonType": "string"
+        },
+        "name": {
+            "bsonType": "string"
+        },
+        "software": {
+            "bsonType": "array",
+            "items": {
+                "bsonType": "string"
+            }
+        }
+    },
+    "required": [
+        "_id"
+    ]
+}
