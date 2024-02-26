@@ -6,7 +6,6 @@ on:
 jobs:
   run-etl-script:
     runs-on: ubuntu-latest
-    if: github.event.deployment_status.state == 'success' && github.ref == 'refs/heads/preview'
     steps:
       - uses: actions/checkout@v2
       
